@@ -1,0 +1,178 @@
+interface Instrument {
+    id : string,
+    name: String;
+    frequency?: number; //frequency in hZ
+    offset?: number,
+    decay: number; //decay time in milliseconds
+    tone: number; //amount of white noise (0-1.0)
+    tone_decay?: number //white noise decay time in milliseconds
+    volume: number; //gain (0-1.0)
+    env_amount?: number; //pitch envelope amount (scalar multiplier of frequency, 1-10 typically)
+    env_duration?: number //pitch envelope duration in milliseconds
+    saturation?: number //gain constant 1.0-4.0
+    filter_type?: BiquadFilterType,
+    filter_freq?: number,
+    filter?: BiquadFilterNode,
+    osc?: OscillatorNode,
+    osc2?: OscillatorNode,
+    input?: GainNode,
+    noiseInput?: GainNode,
+    output?: GainNode,
+    muteTimeout?: number,
+    waveShaper?: WaveShaperNode,
+    saturationNode?: GainNode
+}
+
+type topology = 'serial' | 'parallel';
+
+// rim
+interface soundGenerator {
+    id: string,
+    name: String,
+    decay: number,
+    filterTypes: BiquadFilterType[],
+    filterFreqs: number[],
+    filterQs: number[],
+    filterNodes: BiquadFilterNode[],
+    filterTopology?: topology,
+    highPassFreq : number,
+    volume: number,
+    saturation?: number,
+    waveShaper?: WaveShaperNode,
+    saturationNode?: GainNode,
+    muteTimeout?: number
+}
+
+//clap
+interface ClapGenerator extends soundGenerator {
+    delayConst: number, //"spread"
+    delayInput?: GainNode,
+    tone_decay: number //level of non-delayed noise
+    tone: number, //lowpass filter on non-delayed noise
+    tune: number, //peak freq
+}
+
+//hi hat/cym
+interface Sampler {
+    id: string,
+    sourceUrl: URL,
+    name: String,
+    decay: number,
+    decayOpen?: number,
+    pitch?: number,
+    highPassFreq : number,
+    lowPassFreq : number
+    volume: number,
+    muteTimeout?: number
+}
+
+
+let BassDrum: Instrument = {
+    id : 'bd',
+    name: 'Bass Drum',
+    frequency: 80,
+    decay: 300,
+    tone : 0.5,
+    tone_decay: 20,
+    volume: 0.5,
+    env_amount: 2.5,
+    env_duration: 50,
+    filter_type: 'lowpass',
+    filter_freq: 3000,
+    saturation: 0.5,
+};
+
+let SnareDrum: Instrument = {
+    id : 'sd',
+    name: 'Snare Drum',
+    frequency: 220,
+    decay: 100,
+    tone : 0.25,
+    tone_decay: 250,
+    volume: 0.5,
+    env_amount: 4.0,
+    env_duration: 10,
+    filter_type: 'notch',
+    filter_freq: 1000
+};
+
+let LowTom: Instrument = {
+    id : 'lt',
+    name: 'Low Tom',
+    frequency: 100,
+    offset: 100,
+    decay: 200,
+    tone : 0.05,
+    tone_decay: 100,
+    volume: 0.5,
+    env_amount: 2.0, 
+    env_duration: 100
+};
+
+let MedTom: Instrument = {
+    id : 'mt',
+    name: 'Med Tom',
+    frequency: 200,
+    offset: -50,
+    decay: 200,
+    tone : 0.05,
+    tone_decay: 100,
+    volume: 0.5,
+    env_amount: 2.0, 
+    env_duration: 100
+};
+
+let HiTom: Instrument = {
+    id : 'ht',
+    name: 'Hi Tom',
+    frequency: 300,
+    offset: -80,
+    decay: 200,
+    tone : 0.05,
+    tone_decay: 100,
+    volume: 0.5,
+    env_amount: 2.0, 
+    env_duration: 100
+};
+
+
+let RimShot: soundGenerator = {
+    id: 'rs',
+    name: 'Rim Shot',
+    decay: 20,
+    filterTypes: ['bandpass', 'bandpass', 'bandpass'],
+    filterFreqs: [220, 400, 800],
+    filterQs:    [6.5, 7.5, 6.5],
+    filterTopology: 'parallel',
+    highPassFreq : 100,
+    filterNodes: [],
+    volume : 0.5,
+    saturation: 2.0
+};
+
+
+let HandClap: ClapGenerator = {
+    id: 'hc',
+    name: 'Hand Clap',
+    decay: 80,
+    delayConst: 10,
+    filterTypes: ['lowpass', 'highpass', 'peaking'], // 'bandpass'],
+    filterFreqs: [5000, 900, 1200],
+    filterQs:    [0.5, 1.2, 9.5],
+    filterTopology: 'serial',
+    highPassFreq : 80,
+    filterNodes: [],
+    volume : 0.2,
+    tune: 1000,
+    tone: 2200,
+    tone_decay: 250
+};
+
+let HiHat: Sampler;
+let Cymbal: Sampler;
+
+
+let instruments: Instrument[] = [BassDrum, SnareDrum, LowTom, MedTom, HiTom ];
+let generators: soundGenerator[] = [RimShot, HandClap];
+let samplers: Sampler[] = [HiHat, Cymbal];
+let instruments_table = {};

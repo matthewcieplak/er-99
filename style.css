@@ -1,0 +1,232 @@
+body {
+    color: #545c79;
+    /* font-family: Arial, Helvetica, sans-serif; */
+    font-family: 'Space Mono', monospace;
+    background: #333;
+}
+
+#wrapper{
+    background-color: #e8e4da;
+    border: 2px solid #d8d4ca;
+    padding: 0 30px;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+
+h1, h2{
+    margin: 0;
+}
+
+.archive{
+    font-family: "Archive";
+}
+
+button {
+    padding: 10px;
+}
+
+.highlight, #logotype { 
+    color: #fd8505;
+}
+
+.highlight{
+    background-color: #545c79; 
+}
+
+.highlight:hover{
+    background-color:  #727a96;
+}
+
+.highlight:active, .highlight.active { 
+    background-color: #3f4761; 
+}
+
+
+
+.shift {
+    background-color: #fd8505;
+}
+
+.shift:hover{
+    background-color: #e77c09;
+}
+
+.shift:active{
+    background-color: #c36d11;
+}
+
+#controls{
+    margin: 0 -20px;
+}
+
+.control_group{
+    /* max-width: 155px; */
+    float: left;
+    display: block;
+    padding: 20px;
+    margin-left: 0;
+    font-size: 12px;
+    width: 12.4%;
+    box-sizing: border-box;
+    /* border-left: 1px solid #545c79; */
+}
+
+/* .control_group:nth-of-type(1){
+    padding-left: 0;
+} */
+
+.control_group:last-of-type{
+    padding-right: 0;
+}
+
+.control_divider{
+    height: 280px;
+    float: left;
+    border-left: 2px solid #545c79;
+    margin: 50px 0 0 0;
+}
+
+.control_group_header{
+    display: block;
+    text-align: center;
+    padding: 5px;
+    /* text-transform: uppercase; */
+    /* font-weight: bold; */
+    font-style: italic;
+    font-weight: 700;
+    /* letter-spacing: -1px; */
+    font-size: 14px;
+    margin: 0 -15px;
+}
+
+.control{
+    width: 50%;
+    float: left;
+    margin: 15px 0 2px 0;
+    text-align: center;
+    letter-spacing: 0px;
+    /* text-transform: uppercase; */
+    position: relative;
+}
+
+.knob{
+    border: 2px solid #333;
+    width: 40px;
+    height: 40px;
+    border-radius: 25px;
+    transform: rotate(0);
+    position: relative;
+    background-color: #3f4761;
+    margin-bottom: 5px;
+}
+
+.control:before{
+    content: ' ';
+    box-shadow: inset 0px 0px 10px rgba(255, 255, 255, 0.3);
+    position: absolute;
+    top: 0px;
+    left: 13px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: block;
+    margin: 0;
+}
+
+.knob .indicator{
+    height: 10px;
+    width: 1px;
+    background: #fd8505;
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    border-left: 3px solid #ed7505;
+    /* border-right: 1px solid #666; */
+}
+
+#sequencer{
+    clear: both;
+    margin-top: 20px;
+}
+
+.sequencer_button{
+    box-sizing: border-box;
+    background-color: #d1c8af;
+    width: 5.2%; 
+    aspect-ratio: 1 / 1;
+    margin: 0 1% 0 0;
+    float: left;
+    display: block;
+    border-top: 3px solid #d7d5cf;
+    border-left: 8px solid #bbab8d;
+    border-bottom: 12px solid #b7b4ad;
+    border-right: 6px solid #5e5c5c;
+    border-radius: 2px;
+    position: relative;
+}
+
+    /* .sequencer_button:before{
+        content: ' ';
+        position: absolute;
+        width: 102%;
+        height: 102%;
+        background:rgba(255, 255, 255, 0.3);
+        margin: -5px;
+        top: -2px;
+        left: -2px;
+    } */
+
+.sequencer_button .squareled{
+    position: absolute;
+    top: 2px;
+    left: 50%;
+    margin-left: -15%;
+    width: 30%;
+    height: 7px;
+    background: rgba(0, 0, 0, 0.7)
+}
+
+.sequencer_button.active .squareled{
+    background: #c06401;
+    box-shadow: 0 0 14px rgba(252, 150, 1, 0.9);
+}
+
+.sequencer_button.playing .squareled{
+    background: #fd9e37;
+    box-shadow: 0 0 14px rgba(252, 150, 1, 0.9);
+}
+
+.sequencer_button .number{
+    display: block;
+    position: absolute;
+    width: 30px;
+    top: -24px;
+    left: 50%;
+    margin-left: -5px;
+}
+
+.led{
+    background-color:rgba(88, 4, 4, 0.7);
+    width: 10px;
+    height: 10px;
+    float: left;
+    margin: 3px -15px 0 5px;
+    /* transition: box-shadow 0.5s linear; */
+    box-shadow: inset 0 0 5px rgba(255, 66, 66, 0.01);
+    transition: box-shadow 0.2s linear, background-color 0.2s linear;
+    border-radius: 10px;
+
+}
+
+.led:nth-of-type(2){
+    /* background-color: blue; */
+    float: right;
+    margin: 3px 5px 0 -15px;
+}
+
+.led.active{
+    box-shadow: inset 0 0 5px rgba(255, 66, 66, 0.99);
+    background-color: rgba(240, 0, 0, 0.7);
+    transition: box-shadow 0.01s linear, background-color 0.01s linear;
+}

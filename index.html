@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ER-99 Drum Synth</title>
+        <link href="style.css" rel="stylesheet" type="text/css" /> 
+        <script type="text/javascript" src="noise.js"></script>
+        <script type="text/javascript" src="instruments.js"></script>
+        <script type="text/javascript" src="sequencer.js"></script>
+        <script type="text/javascript" src="ui.js"></script>
+        <script type="text/javascript" src="index.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div id="wrapper">
+        <h3 id="logotype">EXTRALIFE</h3>
+
+        <h2 class="archive" style="float: right;">RHYTHM MACHINE</h2>
+        <h1 class="archive">ER-99</h1>
+
+        <div id="bd_controls" class="control_group">
+            <div class="control_group_header highlight"><span id="bd_led" class="led"></span>Bass Drum</div>
+            <div class="control">
+                <button class="knob" name="bd_pitch" data-instrument="bd" data-param="frequency" data-range-min="20" data-range-max="250" value="200" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>Tune</label>
+            </div>
+            <div class="control">
+                <button class="knob" name="bd_volume" data-instrument="bd" data-param="volume" data-range-min="0.0" data-range-max="1.0" value="0.5"><span class="indicator"></span></button><br />
+                <label>Volume</label>
+            </div>
+            <div class="control">
+                <button class="knob" name="bd_tone" data-instrument="bd" data-param="tone" data-range-min="0.0" data-range-max="1.0" value="0.5"><span class="indicator"></span></button><br />
+                <label>Attack</label>
+            </div>
+            <!--div class="control">
+                <button class="knob" name="bd_snap" data-instrument="bd" data-param="tone_decay" data-range-min="0.0" data-range-max="1000" value="100"><span class="indicator"></span></button><br />
+                <label>BD Snap</label>
+            </div-->
+            <div class="control">
+                <button class="knob" name="bd_decay" data-instrument="bd" data-param="decay" data-range-min="50" data-range-max="2000" value="200"><span class="indicator"></span></button><br />
+                <label>Decay</label>
+            </div>
+            <!--div class="control advanced">
+                <button class="knob" name="bd_env_amount" data-instrument="bd" data-param="env_amount" data-range-min="0.9" data-range-max="10.0" value="2.0"><span class="indicator"></span></button><br />
+                <label>P Env</label>
+            </div-->
+            <div class="control advanced">
+                <button class="knob" name="bd_env_time" data-instrument="bd" data-param="env_duration" data-range-min="0.0" data-range-max="0" value="2000"><span class="indicator"></span></button><br />
+                <label>Env Time</label>
+            </div>
+            <div class="control advanced">
+                <button class="knob" name="bd_env_time" data-instrument="bd" data-param="saturation" data-range-min="0.9" data-range-max="3.0" value="1.0"><span class="indicator"></span></button><br />
+                <label>Drive</label>
+            </div>
+
+        </div>
+
+        <div class="control_divider"></div>
+
+        <div id="sd_controls" class="control_group">
+            <div class="control_group_header highlight"><span id="sd_led" class="led"></span>Snare Drum</div>
+            <div class="control">
+                <button class="knob" name="sd_pitch" data-instrument="sd" data-param="frequency" data-range-min="10" data-range-max="600" value="200" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>Tune</label>
+            </div> 
+            <div class="control">
+                <button class="knob" name="sd_volume" data-instrument="sd" data-param="volume" data-range-min="0" data-range-max="1.00" value="200" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>Level</label>
+            </div>
+            <div class="control">
+                <button class="knob" name="sd_tone" data-instrument="sd" data-param="tone" data-range-min="0.0" data-range-max="1.0" value="0.5"><span class="indicator"></span></button><br />
+                <label>Tone</label>
+            </div>
+            <div class="control">
+                <button class="knob" name="sd_snap" data-instrument="sd" data-param="tone_decay" data-range-min="0.0" data-range-max="1000" value="100"><span class="indicator"></span></button><br />
+                <label>Snappy</label>
+            </div>
+            <div class="control advanced">
+                <button class="knob" name="sd_decay" data-instrument="sd" data-param="decay" data-range-min="10" data-range-max="1000" value="200" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>Ring</label>
+            </div>  
+
+      
+        </div>
+
+        <div class="control_divider"></div>
+
+        <div id="lt_controls" class="control_group">
+            <div class="control_group_header highlight"><span id="lt_led" class="led"></span>Low Tom</div>
+            <div class="control">
+                <button class="knob" name="lt_pitch" data-instrument="lt" data-param="frequency" data-range-min="40" data-range-max="300" value="120" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>Tune</label>
+            </div> 
+            <div class="control">
+                <button class="knob" name="lt_volume" data-instrument="lt" data-param="volume" data-range-min="0" data-range-max="1.00" value="1.0" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>Level</label>
+            </div>
+            <div class="control">
+                <button class="knob" name="lt_decay" data-instrument="lt" data-param="decay" data-range-min="60" data-range-max="300" value="200" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>Decay</label>
+            </div> 
+
+            <div class="control advanced">
+                <button class="knob" name="lt_tone" data-instrument="lt" data-param="tone" data-range-min="0" data-range-max="0.12" value="0.25" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>Tone</label>
+            </div> 
+
+
+            <div class="control advanced">
+                <button class="knob" name="lt_offset" data-instrument="lt" data-param="offset" data-range-min="-200" data-range-max="200" value="100" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>offset</label>
+            </div> 
+
+
+            <!--div class="control">
+                <button class="knob" name="lt_snap" data-instrument="lt" data-param="tone_decay" data-range-min="0.0" data-range-max="1000" value="100"><span class="indicator"></span></button><br />
+                <label>Snappy</label>
+            </div-->
+
+            <!--div class="control">
+                <button class="knob" name="lt_env" data-instrument="lt" data-param="env_amount" data-range-min="1.0" data-range-max="10" value="2.0"><span class="indicator"></span></button><br />
+                <label>Env</label>
+            </div-->
+
+            <!--div class="control">
+                <button class="knob" name="lt_env" data-instrument="lt" data-param="env_duration" data-range-min="0.0" data-range-max="1000" value="100"><span class="indicator"></span></button><br />
+                <label>Env Dur</label>
+            </div-->
+
+        </div>
+
+        <div class="control_divider"></div>
+
+        <div id="mt_controls" class="control_group">
+            <div class="control_group_header highlight"><span id="mt_led" class="led"></span>Mid Tom</div>
+            <div class="control">
+                <button class="knob" name="mt_pitch" data-instrument="mt" data-param="frequency" data-range-min="100" data-range-max="400" value="120" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>Tune</label>
+            </div> 
+            <div class="control">
+                <button class="knob" name="mt_volume" data-instrument="mt" data-param="volume" data-range-min="0" data-range-max="1.00" value="1.0" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>Level</label>
+            </div>
+            <div class="control">
+                <button class="knob" name="mt_decay" data-instrument="mt" data-param="decay" data-range-min="60" data-range-max="300" value="200" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>Decay</label>
+            </div> 
+
+            <div class="control advanced">
+                <button class="knob" name="mt_tone" data-instrument="mt" data-param="tone" data-range-min="0" data-range-max="0.12" value="0.25" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>Tone</label>
+            </div> 
+        </div>
+
+        <div class="control_divider"></div>
+
+        <div id="ht_controls" class="control_group">
+            <div class="control_group_header highlight"><span id="ht_led" class="led"></span>Hi Tom</div>
+            <div class="control">
+                <button class="knob" name="ht_pitch" data-instrument="ht" data-param="frequency" data-range-min="150" data-range-max="600" value="120" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>Tune</label>
+            </div> 
+            <div class="control">
+                <button class="knob" name="ht_volume" data-instrument="ht" data-param="volume" data-range-min="0" data-range-max="1.00" value="1.0" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>Level</label>
+            </div>
+            <div class="control">
+                <button class="knob" name="ht_decay" data-instrument="ht" data-param="decay" data-range-min="60" data-range-max="300" value="200" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>Decay</label>
+            </div> 
+
+            <div class="control advanced">
+                <button class="knob" name="ht_tone" data-instrument="ht" data-param="tone" data-range-min="0" data-range-max="0.12" value="0.95" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>Tone</label>
+            </div> 
+        </div>
+
+        <div class="control_divider"></div>
+
+        <div id="rs_controls" class="control_group">
+            <div class="control_group_header highlight"><span id="rs_led" class="led"></span>Rim / Clap<span id="hc_led" class="led"></span></div>
+            <div class="control">
+                <button class="knob" name="rs_volume" data-instrument="rs" data-param="volume" data-range-min="0" data-range-max="0.5" value="0.25" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>RS Level</label>
+            </div>
+            <div class="control">
+                <button class="knob" name="hc_volume" data-instrument="hc" data-param="volume" data-range-min="0" data-range-max="0.5" value="0.2" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>HC Level</label>
+            </div>
+            <div class="control">
+                <button class="knob" name="hc_spread" data-instrument="hc" data-param="delayConst" data-range-min="2" data-range-max="75" value="20" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>Spread</label>
+            </div>
+            <div class="control">
+                <button class="knob" name="hc_decay" data-instrument="hc" data-param="decay" data-range-min="0" data-range-max="600" value="100" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>Decay</label>
+            </div>
+            <div class="control">
+                <button class="knob" name="hc_tone_decay" data-instrument="hc" data-param="tone_decay" data-range-min="10" data-range-max="1000" value="250" data-curve="exp"><span class="indicator"></span></button><br />
+                <label>Tail</label>
+            </div>
+
+        </div>
+
+        <div class="control_divider"></div>
+
+
+        <div id="hh_controls" class="control_group">
+            <div class="control_group_header highlight"><span id="chh_led" class="led"></span>Hi Hat<span id="ohh_led" class="led"></span></div>
+        </div>
+
+        <div class="control_divider"></div>
+
+        <div id="cy_controls" class="control_group">
+            <div class="control_group_header highlight"><span id="cy_led" class="led"></span>Cymbal</div>
+        </div>
+        <div style="clear: both;"></div>
+
+        <div id="sequencer">
+            <div class="sequencer_button" data-step="1" id="sequencer_button_1"><span class="squareled"></span><span class="number">1</span></div>
+            <div class="sequencer_button" data-step="2" id="sequencer_button_2"><span class="squareled"></span><span class="number">2</span></div>
+            <div class="sequencer_button" data-step="3" id="sequencer_button_3"><span class="squareled"></span><span class="number">3</span></div>
+            <div class="sequencer_button" data-step="4" id="sequencer_button_4"><span class="squareled"></span><span class="number">4</span></div>
+            <div class="sequencer_button" data-step="5" id="sequencer_button_5"><span class="squareled"></span><span class="number">5</span></div>
+            <div class="sequencer_button" data-step="6" id="sequencer_button_6"><span class="squareled"></span><span class="number">6</span></div>
+            <div class="sequencer_button" data-step="7" id="sequencer_button_7"><span class="squareled"></span><span class="number">7</span></div>
+            <div class="sequencer_button" data-step="8" id="sequencer_button_8"><span class="squareled"></span><span class="number">8</span></div>
+            <div class="sequencer_button" data-step="9" id="sequencer_button_9"><span class="squareled"></span><span class="number">9</span></div>
+            <div class="sequencer_button" data-step="10" id="sequencer_button_10"><span class="squareled"></span><span class="number">10</span></div>
+            <div class="sequencer_button" data-step="11" id="sequencer_button_11"><span class="squareled"></span><span class="number">11</span></div>
+            <div class="sequencer_button" data-step="12" id="sequencer_button_12"><span class="squareled"></span><span class="number">12</span></div>
+            <div class="sequencer_button" data-step="13" id="sequencer_button_13"><span class="squareled"></span><span class="number">13</span></div>
+            <div class="sequencer_button" data-step="14" id="sequencer_button_14"><span class="squareled"></span><span class="number">14</span></div>
+            <div class="sequencer_button" data-step="15" id="sequencer_button_15"><span class="squareled"></span><span class="number">15</span></div>
+            <div class="sequencer_button" data-step="16" id="sequencer_button_16"><span class="squareled"></span><span class="number">16</span></div>
+        </div>
+
+        <div style="clear: both;"></div>
+
+
+        <p>Play the TR-909 in your browser</p> 
+        <p>Press the 1 and 2 keys to play the drums</p>
+        <div id="instruments">
+            <div class="">
+                <button id="bd_key" data-instrument="bd" class="highlight">Bass Drum</button>
+                <button id="sd_key" data-instrument="sd" class="highlight">Snare Drum</button>
+            </div>
+
+            <div class="control_group">
+                <span>Volume: </span>
+                <input class="shift" type="range" min="0.0" max="1.0" step="0.01"
+                    value="0.5" list="volumes" name="volume">
+                <datalist id="volumes">
+                  <option value="0.0" label="Mute">
+                  <option value="1.0" label="100%">
+                </datalist>
+              </div>
+        </div>
+
+        <div style="clear: both;"></div>
+    </body>
+</html>
