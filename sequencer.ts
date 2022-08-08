@@ -7,6 +7,8 @@ let current_step = 0;
 let sequencerTimeout:number;
 let active_instrument_id:string = 'bd';
 let start_button:HTMLButtonElement;
+let clear_button:HTMLButtonElement;
+let jumble_button:HTMLButtonElement;
 const SEQUENCE_LENGTH:number = 16;
 
 function initSequence(id:string){
@@ -33,6 +35,13 @@ function selectInstrument(){
 function clearTrack(){
     for (let i:number = 0; i < SEQUENCE_LENGTH; i++){
         sequencer[active_instrument_id][i] = 0;
+    }
+    updateSequenceDisplay();
+}
+
+function jumbleTrack(){
+    for (let i:number = 0; i < SEQUENCE_LENGTH; i++){
+        sequencer[active_instrument_id][i] = Math.round(Math.random());
     }
     updateSequenceDisplay();
 }
@@ -97,7 +106,10 @@ function sequencerSetup(){
 
     start_button = document.querySelector('#start_button');
     start_button.addEventListener('click', toggleSequence);
-    document.querySelector('#clear_button').addEventListener('click', clearTrack);
+    clear_button = document.querySelector('#clear_button');
+    clear_button.addEventListener('click', clearTrack);
+    jumble_button = document.querySelector('#jumble_button');
+    jumble_button.addEventListener('click', jumbleTrack);
 }
 
 var presets = [
