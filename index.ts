@@ -17,8 +17,6 @@ let globalParams = {
 function playNote(instrument_id, accent:Boolean){
     if (!running) setupAudio();
 
-    console.log(instrument_id);
-    //console.log("Playing "+instrument.name);
     document.querySelector('#'+instrument_id+'_led').className = 'led active';
     var played_id:string = instrument_id;
     var closedState:Boolean = false;

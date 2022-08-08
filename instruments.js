@@ -108,7 +108,7 @@ let Ride = {
     decay: 2000,
     highPassFreq: 100,
     lowPassFreq: 20000,
-    volume: 0.5,
+    volume: 0.2,
     pitch: 1.0,
 };
 let Crash = {
@@ -118,7 +118,7 @@ let Crash = {
     decay: 2000,
     highPassFreq: 100,
     lowPassFreq: 20000,
-    volume: 0.5,
+    volume: 0.3,
     pitch: 1.0,
 };
 let instruments = [BassDrum, SnareDrum, LowTom, MedTom, HiTom];

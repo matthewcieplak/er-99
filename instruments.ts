@@ -190,7 +190,7 @@ let Ride: Sampler = {
     decay: 2000,
     highPassFreq: 100,
     lowPassFreq: 20000,
-    volume: 0.5,
+    volume: 0.2,
     pitch: 1.0,
 };
 
@@ -202,7 +202,7 @@ let Crash: Sampler = {
     decay: 2000,
     highPassFreq: 100,
     lowPassFreq: 20000,
-    volume: 0.5,
+    volume: 0.3,
     pitch: 1.0,
 };
 

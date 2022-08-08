@@ -3,7 +3,7 @@ let sequencer = {};
 let playing = false;
 let tempo = 120;
 let tempoInMs = 60 * 1000 / (4 * tempo);
-let current_step = 0;
+let current_step = 10;
 let sequencerTimeout:number;
 let active_instrument_id:string = 'bd';
 let start_button:HTMLButtonElement;
@@ -85,14 +85,12 @@ function updateSequenceDisplay(){
 }
 
 function onSequencerButtonClick(event){
-    console.log('clicked seq button');
     var target = event.target;
     if (event.target.className == 'squareled') {
         target = event.target.parent;
     }
     if (target.getAttribute('data-step')) {
         var step = parseInt(event.target.getAttribute('data-step')) - 1;
-        console.log(step);
         sequencer[active_instrument_id][step] += 1;
         if (sequencer[active_instrument_id][step] > 2) sequencer[active_instrument_id][step] = 0;
         updateSequenceDisplay();
