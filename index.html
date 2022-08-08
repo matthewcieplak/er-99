@@ -17,11 +17,15 @@
     </head>
     <body>
         <div id="wrapper">
-        <h3 id="logotype">EXTRALIFE</h3>
+        <div id="bg"></div>
+        <div class="header">
+            <h3 id="logotype"><img src="img/logotype-transparent-300.png" class="logo" alt="Extralife Instruments" width="300"></h3>
 
-        <h2 class="archive" style="float: right;">RHYTHM MACHINE</h2>
-        <h1 class="archive">ER-99</h1>
+            <h2 class="archive" style="float: right;">RHYTHM MACHINE</h2>
+            <h1 class="archive">ER-99</h1>
+        </div>
 
+        <div class="controls">
         <div id="bd_controls" class="control_group">
             <div class="control_group_header highlight"><span id="bd_led" class="led"></span>
                 <span class="instrument_name" data-id="bd">
@@ -200,21 +204,20 @@
         <div id="rs_controls" class="control_group">
             <div class="control_group_header highlight">
                 <span id="rs_led" class="led"></span>
-                <span class="instrument_name" data-id="rs">Rim </span>
-                /
-                <span class="instrument_name" data-id="hc"> Clap</span>
+                <span class="instrument_name half_width" data-id="rs">Rim / </span>
+                <span class="instrument_name half_width" data-id="hc">&nbsp;Clap</span>
                 <span id="hc_led" class="led"></span>
             </div>
             <div class="control">
-                <button class="knob" name="rs_volume" data-instrument="rs" data-param="volume" data-range-min="0" data-range-max="0.5" value="0.25" data-curve="exp"><span class="indicator"></span></button><br />
+                <button class="knob" name="rs_volume" data-instrument="rs" data-param="volume" data-range-min="0" data-range-max="1.5" value="0.25" data-curve="exp"><span class="indicator"></span></button><br />
                 <label>RS Level</label>
             </div>
             <div class="control">
-                <button class="knob" name="hc_volume" data-instrument="hc" data-param="volume" data-range-min="0" data-range-max="0.5" value="0.2" data-curve="exp"><span class="indicator"></span></button><br />
+                <button class="knob" name="hc_volume" data-instrument="hc" data-param="volume" data-range-min="0" data-range-max="1.0" value="0.2" data-curve="exp"><span class="indicator"></span></button><br />
                 <label>HC Level</label>
             </div>
             <div class="control hidden-sm">
-                <button class="knob" name="hc_spread" data-instrument="hc" data-param="delayConst" data-range-min="2" data-range-max="75" value="20" data-curve="exp" data-show-actual-value="yes"><span class="indicator"></span></button><br />
+                <button class="knob" name="hc_spread" data-instrument="hc" data-param="delayConst" data-range-min="2" data-range-max="37" value="20" data-curve="exp" data-show-actual-value="yes"><span class="indicator"></span></button><br />
                 <label>Spread</label>
             </div>
             <div class="control hidden-sm">
@@ -233,8 +236,8 @@
 
         <div id="hh_controls" class="control_group">
             <div class="control_group_header highlight"><span id="chh_led" class="led"></span>
-                <span class="instrument_name" data-id="chh">Hi </span>
-                <span class="instrument_name" data-id="ohh">Hat</span>
+                <span class="instrument_name half_width" data-id="chh">Hi&nbsp;</span>
+                <span class="instrument_name half_width" data-id="ohh">Hat</span>
             <span id="ohh_led" class="led"></span></div>
             <div class="control">
                 <button class="knob" name="ohh_pitch" data-instrument="ohh" data-param="pitch" data-range-min="0.25" data-range-max="1.75" value="1.0"><span class="indicator"></span></button><br />
@@ -260,7 +263,7 @@
         <div id="cy_controls" class="control_group">
             <div class="control_group_header highlight">
                 <span id="rc_led" class="led"></span>
-                <span class="instrument_name" data-id="rc">Cym</span><span class="instrument_name" data-id="cr">bal</span>
+                <span class="instrument_name half_width" data-id="rc">Cym</span><span class="instrument_name half_width" data-id="cr">bal</span>
                 <span id="cr_led" class="led"></span>
             </div>
             <div class="control">
@@ -288,6 +291,7 @@
                 <label>Decay</label>
             </div>
         </div>
+        </div>
 
         <div style="clear: both;"></div>
 
@@ -312,31 +316,32 @@
                 Jumble
             </div>
 
-            <div class=" master_control">
+            <div class="master_control">
                 <div id="screen">099</div>
             </div>
-            <div class="master_control">
+
+            <div class="master_control has_knob">
                 <button class="knob big_knob" data-param="tempo" data-range-min="20" data-range-max="220" value="120" data-control="master" data-show-actual-value="yes"><span class="indicator"></span></button>
                 Tempo
             </div>
 
-            <div class="master_control hidden-sm">
+            <div class="master_control has_knob hidden-sm">
                 <button class="knob big_knob" data-param="globalAccent" data-range-min="1.1" data-range-max="4.0" value="2" data-control="master"><span class="indicator"></span></button>
                 Accent
             </div>
 
-            <div class="master_control hidden-sm">
+            <div class="master_control has_knob hidden-sm">
                 <button class="knob big_knob" data-param="swing" data-control="master" data-range-min="0" data-range-max="7" value="0" data-control="master" data-show-actual-value="yes"><span class="indicator"></span></button>
                 Swing
             </div>
 
 
 
-            <div class="master_control right">
+            <div class="master_control has_knob right">
                 <button class="knob big_knob" data-param="volume" data-control="master" data-range-min="0" data-range-max="1.0" value="0.5 data-control="master"><span class="indicator"></span></button>
                 Volume
             </div>
-            <div class="master_control hidden-sm hidden-md right">
+            <div class="master_control has_knob hidden-sm hidden-md right">
                 <button class="knob big_knob" data-param="compression" data-control="master" data-range-min="0" data-range-max="40" value="20"><span class="indicator"></span></button>
                 Compress
             </div>
@@ -366,7 +371,7 @@
 
         <div style="clear: both;"></div>
 
-        <p>Press the 0-9 keys or NUMPAD keys top play the drums.</p>
+        <p>Press the 0-9 keys or NUMPAD keys to play the drums.</p>
 
         <div style="clear: both;"></div>
 

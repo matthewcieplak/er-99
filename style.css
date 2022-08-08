@@ -7,11 +7,38 @@ body {
 
 #wrapper{
     background-color: #e8e4da;
-    border: 2px solid #d8d4ca;
-    padding: 0 30px;
+    /* border: 2px solid #d8d4ca; */
+    padding: 1px 20px;
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
+    position: relative;
+    /* border-top: 5px solid rgba(255,255,255, 0.5); */
+    /* border-top: 1px solid transparent; */
+    border-left: 15px solid rgb(93, 92, 86);
+    border-right: 15px solid rgb(93, 92, 86);
+    box-sizing: border-box;
+    /* border-bottom: 5px solid rgba(0,0,0, 0.5); */
+}
+
+#bg{
+    z-index: 0;;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.5;
+    background-image: url('img/plastic_texture_1920.jpg');
+    background-size: cover;
+    box-shadow:  inset 0 7px 9px rgb(255 255 255 / 90%), inset -1px -13px 15px rgb(0 0 0 / 50%)
+}
+
+.header{
+    position: relative;
+    z-index: 2;
 }
 
 h1, h2{
@@ -31,15 +58,15 @@ button {
 }
 
 .highlight{
-    background-color: #545c79; 
+    background-color: #272c3f; 
 }
 
 .highlight:hover{
-    background-color:  #727a96;
+    background-color:  #3f4761;;
 }
 
 .highlight:active, .highlight.active { 
-    background-color: #3f4761; 
+    background-color: #10131b; 
 }
 
 
@@ -90,7 +117,7 @@ button {
 .control_group_header{
     display: block;
     text-align: center;
-    padding: 5px;
+    padding: 0;
     /* text-transform: uppercase; */
     /* font-weight: bold; */
     font-style: italic;
@@ -98,7 +125,30 @@ button {
     /* letter-spacing: -1px; */
     font-size: 14px;
     margin: 0 -15px;
+    position: relative;
+    z-index: 10;
+    height: 30px;
 }
+
+.control_group_header .instrument_name{
+    /* border: 1px solid red; */
+    display: block;
+    text-align: center;
+    padding: 5px 0;
+}
+
+.control_group_header .instrument_name.half_width{
+    width: 50%;
+    float: left;
+}
+
+.control_group_header .instrument_name.half_width:nth-of-type(2){
+    text-align: right;
+}
+.control_group_header .instrument_name.half_width:nth-of-type(3){
+    text-align: left;
+}
+
 
 .control{
     width: 50%;
@@ -110,6 +160,7 @@ button {
     position: relative;
 }
 
+
 .knob{
     border: 2px solid #333;
     width: 40px;
@@ -117,9 +168,31 @@ button {
     border-radius: 25px;
     transform: rotate(0);
     position: relative;
-    background-color: #3f4761;
+    /* background-color: #3f4761; */
+    background-image: url('img/plastic_texture_dark.jpg');
+    background-size: 300px;
     margin-bottom: 5px;
 }
+
+/* .control:nth-of-type(1n) .knob,
+.master_control:nth-of-type(1n) .knob{ 
+    background-position: -100px -100px;
+}
+
+.control:nth-of-type(2n) .knob,
+.master_control:nth-of-type(2n) .knob{ 
+    background-position: -200px -200px;
+}
+
+.control:nth-of-type(3n) .knob,
+.master_control:nth-of-type(3n) .knob{ 
+    background-position: -200px 0px;
+}
+
+.control:nth-of-type(4n) .knob,
+.master_control:nth-of-type(4n) .knob{ 
+    background-position: 0px -200px;
+} */
 
 
 .big_knob{
@@ -130,18 +203,20 @@ button {
     display: block;
 }
 
-.control:before{
+.control:before, .master_control.has_knob:before{
     content: ' ';
-    box-shadow: inset 0px 0px 10px rgba(255, 255, 255, 0.3);
+    box-shadow: 2px 5px 5px rgb(0 0 0 / 50%);
     position: absolute;
-    top: 0px;
-    left: 13px;
-    width: 50px;
-    height: 50px;
+    width: 38px;
+    height: 38px;
+    top: 1px;
+    left: 50%;
+    margin-left: -20px;
     border-radius: 50%;
     display: block;
-    margin: 0;
 }
+
+
 
 .knob .indicator{
     height: 10px;
@@ -159,26 +234,89 @@ button {
     margin-top: 20px;
 }
 
+#sequencer{
+    clear: both;
+    margin-top: 20px;
+    height: auto;
+    /* background: rgba(0,0,0,0.9); */
+    padding: 2px 0 3px 0;
+}
+
+#sequencer::after{
+    content: ' ';
+    clear: both;
+    width: 0;
+    height: 0;
+    position: relative;
+    display:block;
+}
+
 .sequencer_button, .big_button{
     box-sizing: border-box;
-    background-color: #d1c8af;
-    width: 5.2%; 
+
+    width: 5.75%; 
     aspect-ratio: 1 / 1;
-    margin: 0 1% 0 0;
+    margin: 0 0.5% 0 0;
     float: left;
     display: block;
+    border-style: solid;
+    border-color: transparent;
+    border-color: rgba(0, 0, 0, 0.31) rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.31);
+    /* background-color: rgba(0, 0, 0, 0.61);; */
+    border-width: 1px 3px 4px 3px;
+    border-radius: 2px;
+    position: relative;
+    z-index: 10;
+    box-sizing: border-box;
+    box-shadow:  inset 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+.sequencer_button::after, .big_button::after, .control_group_header:after{
+    content: ' ';
+    background-image: url(img/plastic_texture_small.jpg);
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;
+    opacity: 0.5;
+    background-size: 100%;
+    border-radius: 3px;
+}
+
+.sequencer_button::before, .big_button::before{
+    background-color: #d1c8af;
+    content: ' ';
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    background: transparent;
     border-top: 3px solid #d7d5cf;
     border-left: 8px solid #bbab8d;
     border-bottom: 12px solid #b7b4ad;
     border-right: 6px solid #5e5c5c;
-    border-radius: 2px;
-    position: relative;
+    border-radius: 3px;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    box-shadow: 3px 3px 5px rgba(0,0,0,0.7);
+    overflow: hidden;
 }
 
 .sequencer_button:active, .big_button:active{
-    box-shadow: 0 -3px 10px rgba(0,0,0,0.1);
-    background-color: #a19574;
-    border-color: #8d8a81 #3e3c3c #a7a49d #ab9b7d;
+    border-width: 3px 3px 2px 3px;
+}
+
+.sequencer_button:active::before, .big_button:active::before{
+    box-shadow: none;
+    /*box-shadow: 2px -2px 2px rgb(0 0 0 / 50%); */
+    background-color: #aca080;
+    border-color: #8d8a81 #3e3c3c #87837a #74674f;
+    box-shadow: 2px 2px 3px rgba(0,0,0,0.5)
+    /* top: 4px; */
 }
 
 .big_button{
@@ -220,10 +358,15 @@ button {
 .sequencer_button .number{
     display: block;
     position: absolute;
-    width: 30px;
-    top: -24px;
-    left: 50%;
-    margin-left: -5px;
+    top: -30px;
+    text-align: center;
+    width: 100%;
+    left: 0;
+    margin: 0;
+}
+
+.sequencer_button:active .number{
+    top: -32px;
 }
 
 .led{
@@ -265,10 +408,19 @@ button {
 }
 
 .master_control{
+    position: relative;
     display: block;
     float: left;
     padding-right: 20px;
     text-align: center;
+}
+
+.master_control.has_knob:before{
+    top: 0px;
+    left: 0px;
+    margin-left: 0;
+    width: 68px;
+    height: 68px;
 }
 
 .master_control:last-of-type{
@@ -327,9 +479,12 @@ button {
     }
 
     .sequencer_button{
-        border-width: 0px 2px 5px 4px;
         margin-right: 2px;
         width: 5.9%;
+    }
+
+    .sequencer_button::before{
+        border-width: 0px 2px 5px 4px;
     }
 
     .hidden-md{ display: none; }
@@ -340,11 +495,21 @@ button {
         display: block;
     }
 
+    .master_control.has_knob:before{
+        width: 58px;
+        height: 58px;
+    }
+
+
 }
 
 
 /* Smartphones (landscape) ----------- */
 @media only screen and (max-width : 660px) {
+    #bg{
+        background-image: none;
+    }
+
     .control_group{
         width: 50%;
         padding-top: 5px;
@@ -363,7 +528,7 @@ button {
         border-width: 0px 2px 3px 2px;
         margin-right: 1px;
         width: 12.2%;
-        margin-bottom: 20px;
+        margin-bottom: 0;
     }
 
     .hidden-md, .hidden-sm{ display: none; }
@@ -372,6 +537,15 @@ button {
         width: 55px;
         height: 55px;
         display: block;
+    }
+
+    .master_control.has_knob:before{
+        width: 53px;
+        height: 53px;
+    }
+
+    .sequencer_button .number{
+        top: 9px;
     }
 
     #screen{
@@ -401,17 +575,10 @@ button {
     .sequencer_button{
         border-width: 0px 1px 2px 2px;
         margin: 0px;
+        width: 25%;
     }
 
     .hidden-md, .hidden-sm, .hidden-xs{ display: none;}
-    /* Styles
-    .long_name{
-        display: none;
-    }
-
-    .short_name{
-        display: inline;
-    }   */
 }
 
   
