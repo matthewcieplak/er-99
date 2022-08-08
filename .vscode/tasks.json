@@ -9,7 +9,10 @@
 				"$tsc-watch"
 			],
 			"group": "build",
-			"label": "tsc: watch - tsconfig.json"
+			"label": "tsc: watch - tsconfig.json",
+			"options": {
+				"shell": { "executable": "PowerShell", "args": ["-ExecutionPolicy", "Bypass"] }
+			}
 		}
 	]
 }

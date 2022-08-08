@@ -90,9 +90,38 @@ let HandClap = {
     tone: 2200,
     tone_decay: 250
 };
-let HiHat;
-let Cymbal;
+let HiHat = {
+    id: 'ohh',
+    name: 'Hi Hat',
+    sourceUrl: 'samples/hh.wav',
+    decay: 2000,
+    decay_closed: 300,
+    highPassFreq: 100,
+    lowPassFreq: 20000,
+    volume: 0.5,
+    pitch: 1.0,
+};
+let Ride = {
+    id: 'rc',
+    name: 'Ride Cymbal',
+    sourceUrl: 'samples/ride.wav',
+    decay: 2000,
+    highPassFreq: 100,
+    lowPassFreq: 20000,
+    volume: 0.5,
+    pitch: 1.0,
+};
+let Crash = {
+    id: 'cr',
+    name: 'Crash',
+    sourceUrl: 'samples/crash.wav',
+    decay: 2000,
+    highPassFreq: 100,
+    lowPassFreq: 20000,
+    volume: 0.5,
+    pitch: 1.0,
+};
 let instruments = [BassDrum, SnareDrum, LowTom, MedTom, HiTom];
 let generators = [RimShot, HandClap];
-let samplers = [HiHat, Cymbal];
+let samplers = [HiHat, Ride, Crash];
 let instruments_table = {};

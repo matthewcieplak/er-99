@@ -67,7 +67,7 @@ button {
     padding: 20px;
     margin-left: 0;
     font-size: 12px;
-    width: 12.4%;
+    width: 12.2%;
     box-sizing: border-box;
     /* border-left: 1px solid #545c79; */
 }
@@ -121,6 +121,15 @@ button {
     margin-bottom: 5px;
 }
 
+
+.big_knob{
+    width: 70px;
+    height: 70px;
+    border-radius: 50px;
+    margin-bottom: 0;
+    display: block;
+}
+
 .control:before{
     content: ' ';
     box-shadow: inset 0px 0px 10px rgba(255, 255, 255, 0.3);
@@ -150,7 +159,7 @@ button {
     margin-top: 20px;
 }
 
-.sequencer_button{
+.sequencer_button, .big_button{
     box-sizing: border-box;
     background-color: #d1c8af;
     width: 5.2%; 
@@ -166,6 +175,17 @@ button {
     position: relative;
 }
 
+.sequencer_button:active, .big_button:active{
+    box-shadow: 0 -3px 10px rgba(0,0,0,0.1);
+    background-color: #a19574;
+    border-color: #8d8a81 #3e3c3c #a7a49d #ab9b7d;
+}
+
+.big_button{
+    width: 60px;
+    height: 60px;
+}
+
     /* .sequencer_button:before{
         content: ' ';
         position: absolute;
@@ -177,7 +197,7 @@ button {
         left: -2px;
     } */
 
-.sequencer_button .squareled{
+.squareled{
     position: absolute;
     top: 2px;
     left: 50%;
@@ -187,12 +207,12 @@ button {
     background: rgba(0, 0, 0, 0.7)
 }
 
-.sequencer_button.active .squareled{
+.active .squareled{
     background: #c06401;
     box-shadow: 0 0 14px rgba(252, 150, 1, 0.9);
 }
 
-.sequencer_button.playing .squareled{
+.playing .squareled{
     background: #fd9e37;
     box-shadow: 0 0 14px rgba(252, 150, 1, 0.9);
 }
@@ -219,7 +239,7 @@ button {
 
 }
 
-.led:nth-of-type(2){
+.led:last-of-type{
     /* background-color: blue; */
     float: right;
     margin: 3px 5px 0 -15px;
@@ -230,3 +250,168 @@ button {
     background-color: rgba(240, 0, 0, 0.7);
     transition: box-shadow 0.01s linear, background-color 0.01s linear;
 }
+
+.short_name{
+    display: none;
+}
+
+#master_controls{
+    padding: 10px 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-width: 1px 0;
+    margin-top: 0px;
+    height: 90px;
+    margin-bottom: 10px;
+}
+
+.master_control{
+    display: block;
+    float: left;
+    padding-right: 20px;
+    text-align: center;
+}
+
+.master_control:last-of-type{
+    float: right;
+    text-align: left;
+}
+
+#screen{
+    background:rgb(62, 3, 3);
+    color:rgba(240, 0, 0, 0.7);
+    text-shadow: 0px 1px 8px rgba(255, 66, 66, 0.66);
+    font-size: 60px;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 10px;
+    padding: 10px;
+    height: 50px;
+    line-height: 44px;
+    padding-right: 5px;
+    width: 148px;
+    text-align: right;
+    text-transform: uppercase;
+}
+
+.right{
+    float: right;
+    margin-right: 0;
+}
+
+
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen and (max-width : 1200px) and (min-width: 660px){
+  /* Styles */
+    .control_group{
+        width: 24.6%;
+    }
+
+    .extra_parameters{
+        display: none;
+    }
+
+    .control_group:nth-of-type(6){
+        padding-right: 0;
+    }
+
+    .control_group:nth-of-type(9){
+        clear: left;
+    }
+
+    .control_divider{
+        height: 168px;
+    }
+
+    .control_divider:nth-of-type(8){
+        display: none;
+    }
+
+    .sequencer_button{
+        border-width: 0px 2px 5px 4px;
+        margin-right: 2px;
+        width: 5.9%;
+    }
+
+    .hidden-md{ display: none; }
+
+    .big_knob{
+        width: 60px;
+        height: 60px;
+        display: block;
+    }
+
+}
+
+
+/* Smartphones (landscape) ----------- */
+@media only screen and (max-width : 660px) {
+    .control_group{
+        width: 50%;
+        padding-top: 5px;
+    }
+
+    .control_divider{
+        display: none;
+        height: 167px;
+    }
+
+    .control_divider::nth-of-type(4) {
+        display: none;
+    }
+
+    .sequencer_button{
+        border-width: 0px 2px 3px 2px;
+        margin-right: 1px;
+        width: 12.2%;
+        margin-bottom: 20px;
+    }
+
+    .hidden-md, .hidden-sm{ display: none; }
+
+    .big_knob, .big_button{ 
+        width: 55px;
+        height: 55px;
+        display: block;
+    }
+
+    #screen{
+        font-size: 56px;
+        height: 50px;
+        width: 130px;
+        margin-bottom: 20px;
+    }
+}
+
+
+
+/*  */
+
+@media only screen and (max-width : 480px) {  
+    .control_group {
+        width: 100%;
+        float: none;
+        /* border-bottom: 2px solid #ccc; */
+        clear: both;
+    }
+
+    .control_divider{
+        display: none;
+    }
+
+    .sequencer_button{
+        border-width: 0px 1px 2px 2px;
+        margin: 0px;
+    }
+
+    .hidden-md, .hidden-sm, .hidden-xs{ display: none;}
+    /* Styles
+    .long_name{
+        display: none;
+    }
+
+    .short_name{
+        display: inline;
+    }   */
+}
+
+  

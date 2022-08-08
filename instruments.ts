@@ -55,15 +55,18 @@ interface ClapGenerator extends soundGenerator {
 //hi hat/cym
 interface Sampler {
     id: string,
-    sourceUrl: URL,
+    sourceUrl: string,
     name: String,
     decay: number,
-    decayOpen?: number,
+    decay_closed?: number,
     pitch?: number,
     highPassFreq : number,
     lowPassFreq : number
     volume: number,
     muteTimeout?: number
+    buffer?: AudioBuffer,
+    output?: GainNode,
+    sourceNode? : AudioBufferSourceNode
 }
 
 
@@ -168,11 +171,43 @@ let HandClap: ClapGenerator = {
     tone_decay: 250
 };
 
-let HiHat: Sampler;
-let Cymbal: Sampler;
+let HiHat: Sampler = {
+    id: 'ohh',
+    name : 'Hi Hat',
+    sourceUrl : 'samples/hh.wav',
+    decay: 2000,
+    decay_closed: 300,
+    highPassFreq: 100,
+    lowPassFreq: 20000,
+    volume: 0.5,
+    pitch: 1.0,
+};
+
+let Ride: Sampler = {
+    id: 'rc',
+    name : 'Ride Cymbal',
+    sourceUrl : 'samples/ride.wav',
+    decay: 2000,
+    highPassFreq: 100,
+    lowPassFreq: 20000,
+    volume: 0.5,
+    pitch: 1.0,
+};
+
+
+let Crash: Sampler = {
+    id: 'cr',
+    name : 'Crash',
+    sourceUrl : 'samples/crash.wav',
+    decay: 2000,
+    highPassFreq: 100,
+    lowPassFreq: 20000,
+    volume: 0.5,
+    pitch: 1.0,
+};
 
 
 let instruments: Instrument[] = [BassDrum, SnareDrum, LowTom, MedTom, HiTom ];
 let generators: soundGenerator[] = [RimShot, HandClap];
-let samplers: Sampler[] = [HiHat, Cymbal];
+let samplers: Sampler[] = [HiHat, Ride, Crash];
 let instruments_table = {};
