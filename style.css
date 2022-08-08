@@ -168,7 +168,7 @@ button {
     border-radius: 25px;
     transform: rotate(0);
     position: relative;
-    /* background-color: #3f4761; */
+    background-color: #1b2132;
     background-image: url('img/plastic_texture_dark.jpg');
     background-size: 300px;
     margin-bottom: 5px;
