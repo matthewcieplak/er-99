@@ -1,0 +1,1 @@
+aws s3 sync --acl "public-read" --sse "AES256" ./ s3://extralifeinstruments.com/er-99 --exclude '.git/*' --exclude '.vscode/*' --exclude 'node_modules/*' --exclude 'samples/*'
