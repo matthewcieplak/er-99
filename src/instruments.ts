@@ -35,6 +35,7 @@ interface soundGenerator {
     filterQs: number[],
     filterNodes: BiquadFilterNode[],
     filterTopology?: topology,
+    filterGains?: number[],
     highPassFreq : number,
     volume: number,
     saturation?: number,
@@ -142,14 +143,15 @@ let HiTom: Instrument = {
 let RimShot: soundGenerator = {
     id: 'rs',
     name: 'Rim Shot',
-    decay: 20,
+    decay: 30,
     filterTypes: ['bandpass', 'bandpass', 'bandpass'],
     filterFreqs: [220, 500, 950],
-    filterQs:    [6.5, 7.5, 6.5],
+    filterQs:    [10.5, 10.5, 10.5],
+    filterGains: [20, 20, 20],
     filterTopology: 'parallel',
     highPassFreq : 100,
     filterNodes: [],
-    volume : 0.5,
+    volume : 1.0,
     saturation: 2.0
 };
 

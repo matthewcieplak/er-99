@@ -64,14 +64,15 @@ let HiTom = {
 let RimShot = {
     id: 'rs',
     name: 'Rim Shot',
-    decay: 20,
+    decay: 30,
     filterTypes: ['bandpass', 'bandpass', 'bandpass'],
     filterFreqs: [220, 500, 950],
-    filterQs: [6.5, 7.5, 6.5],
+    filterQs: [10.5, 10.5, 10.5],
+    filterGains: [20, 20, 20],
     filterTopology: 'parallel',
     highPassFreq: 100,
     filterNodes: [],
-    volume: 0.5,
+    volume: 1.0,
     saturation: 2.0
 };
 let HandClap = {
