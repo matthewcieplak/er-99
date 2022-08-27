@@ -32,18 +32,12 @@ function clearTrack() {
     for (let i = 0; i < SEQUENCE_LENGTH; i++) {
         sequencer[active_instrument_id][i] = 0;
     }
-    screenDiv.innerText = 'CLR';
-
     updateSequenceDisplay();
 }
 function jumbleTrack() {
     for (let i = 0; i < SEQUENCE_LENGTH; i++) {
         sequencer[active_instrument_id][i] = Math.round(Math.random());
-        if (sequencer[active_instrument_id][i] && Math.random() > 0.66) {
-            sequencer[active_instrument_id][i] = 2;
-        }
     }
-    screenDiv.innerText = 'JMB';
     updateSequenceDisplay();
 }
 function playNextStep() {

@@ -31,7 +31,7 @@ function setupSampler(sampler) {
         // Asynchronously decode the audio file data in request.response
         audioContext.decodeAudioData(request.response, function (buffer) {
             if (!buffer) {
-                alert('error decoding file data: ' + sampler.url);
+                console.error('error decoding file data: ' + sampler.url);
                 return;
             }
             sampler.buffer = buffer;

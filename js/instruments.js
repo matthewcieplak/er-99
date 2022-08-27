@@ -66,7 +66,7 @@ let RimShot = {
     name: 'Rim Shot',
     decay: 20,
     filterTypes: ['bandpass', 'bandpass', 'bandpass'],
-    filterFreqs: [220, 400, 800],
+    filterFreqs: [220, 500, 950],
     filterQs: [6.5, 7.5, 6.5],
     filterTopology: 'parallel',
     highPassFreq: 100,

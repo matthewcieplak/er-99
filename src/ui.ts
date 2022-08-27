@@ -76,31 +76,10 @@ function onMouseUp(event) {
 
 function onMouseMove(event) {
     if (clicking && clickedTarget) {
-        var min = parseFloat(clickedTarget.getAttribute('data-range-min') || '0') || 0.0;
+        var increment_value:number  = event.movementY - event.movementX;
+        var newValue = incrementControl(increment_value, clickedTarget)
         var max = parseFloat(clickedTarget.getAttribute('data-range-max') || '100') || 100.0;
-        var increment = (max - min) / 100.0;
-        var newValue = Math.min(max, Math.max(min, parseFloat(clickedTarget.value) + (increment * (-1 * event.movementY + event.movementX))));
-        var rotation = 0;
-        rotation = (newValue - min) / max * 280.0 - 140;
 
-        clickedTarget.style.transform = 'rotate(' + rotation.toString() + 'deg)';
-        clickedTarget.value = newValue.toString();
-
-        var scalar = 1.0;
-        if (clickedTarget.getAttribute('data-scaling') == 'exp') {
-            scalar = (newValue / max - min);
-        }
-
-        if (clickedInstrument) {
-            clickedInstrument[clickedParam] = newValue * scalar;
-        } else if (clickedMaster) {
-            globalParams[clickedParam] = newValue * scalar;
-            switch (clickedParam) {
-                case 'volume' : mainGainNode.gain.value = newValue; break;
-                case 'tempo'  : tempo = newValue; tempoInMs = 60 * 1000 / (4 * tempo); break;
-                case 'compression' : compressor.threshold.value = newValue * -1; makeup.gain.value = 1.0 + (newValue / 40); console.log(makeup.gain.value); break;
-            }
-        } 
 
         if (clickedTarget.getAttribute('data-show-actual-value') == 'yes') {
             var display_value = newValue;
@@ -109,8 +88,46 @@ function onMouseMove(event) {
         }
         var s = Math.floor(display_value).toString();
         var display_string = s.padStart(3, '0');
-        screenDiv.innerText =display_string; 
+        screenDiv.innerText = display_string; 
 
+    }
+}
+
+function incrementControl(increment_value:number, target:any) {
+    var min = parseFloat(target.getAttribute('data-range-min') || '0') || 0.0;
+    var max = parseFloat(target.getAttribute('data-range-max') || '100') || 100.0;
+    var increment = (max - min) / 100.0;
+    var newValue = Math.min(max, Math.max(min, parseFloat(target.value) + (increment * (-1 * increment_value))));
+    var rotation = 0;
+    rotation = (newValue - min) / max * 280.0 - 140;
+
+    target.style.transform = 'rotate(' + rotation.toString() + 'deg)';
+    target.value = newValue.toString();
+
+    var scalar = 1.0;
+    if (target.getAttribute('data-scaling') == 'exp') {
+        scalar = (newValue / max - min);
+    }
+
+    if (clickedInstrument) {
+        clickedInstrument[clickedParam] = newValue * scalar;
+    } else if (clickedMaster) {
+        globalParams[clickedParam] = newValue * scalar;
+        switch (clickedParam) {
+            case 'volume' : mainGainNode.gain.value = newValue; break;
+            case 'tempo'  : tempo = newValue; tempoInMs = 60 * 1000 / (4 * tempo); break;
+            case 'compression' : compressor.threshold.value = newValue * -1; makeup.gain.value = 1.0 + (newValue / 40); console.log(makeup.gain.value); break;
+        }
+    } 
+
+    return newValue;
+
+}
+
+function initializeKnobPositions(){
+    var controls = document.querySelectorAll("button.knob");
+    for (let i = 0; i < controls.length; i++) {
+        incrementControl(0, controls[i]);
     }
 }
 
@@ -140,6 +157,7 @@ function setup(){
     // volumeControl.addEventListener("change", changeVolume, false);
 
     sequencerSetup();
+    // initializeKnobPositions();
     
 
     active_instrument_id = 'bd';
