@@ -3,6 +3,15 @@ body {
     /* font-family: Arial, Helvetica, sans-serif; */
     font-family: 'Space Mono', monospace;
     background: #333;
+    height: 100%;
+    margin: 0;
+    padding: 10px;
+    box-sizing: border-box;
+    background-image: linear-gradient(45deg, rgb(48, 139, 146),rgb(46, 142, 110));
+}
+
+html{
+    height: 100%;
 }
 
 #wrapper{
@@ -19,6 +28,7 @@ body {
     border-right: 15px solid rgb(93, 92, 86);
     box-sizing: border-box;
     /* border-bottom: 5px solid rgba(0,0,0, 0.5); */
+    min-height: 710px;
 }
 
 #bg{
