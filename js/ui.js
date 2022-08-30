@@ -47,6 +47,7 @@ function keyPressed(event) {
     }
     else if (event.which == 32) {
         toggleSequence();
+        event.stopPropagation();
     }
     return false;
 }

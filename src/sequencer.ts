@@ -79,12 +79,16 @@ function playNextStep(){
 }
 
 function updateSequenceDisplay(){
-    document.querySelectorAll('.sequencer_button').forEach(function(button, idx){
-        if ((idx == current_step && playing) || sequencer[active_instrument_id][idx] == 2) {
-            button.className = 'sequencer_button playing';
-        } else if (sequencer[active_instrument_id][idx] == 1){
-            button.className = 'sequencer_button active';
-        } else {
+    var step_value = 0;
+    document.querySelectorAll('.sequencer_button').forEach(function (button, idx) {
+        step_value = sequencer[active_instrument_id][idx];
+        if ((idx == current_step && playing)) {
+            button.className = 'sequencer_button' + (step_value == 0 ? ' playing' : '');
+        }
+        else if (sequencer[active_instrument_id][idx] > 0) {
+            button.className = 'sequencer_button ' + (step_value == 1 ? 'active' : 'playing');
+        }
+        else {
             button.className = 'sequencer_button';
         }
     });
