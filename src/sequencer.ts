@@ -20,6 +20,7 @@ function toggleSequence(){
         clearTimeout(sequencerTimeout);
         playing = false;
         start_button.className = 'big_button'
+        updateSequenceDisplay();
     } else {
         playing = true;
         playNextStep();
@@ -43,8 +44,9 @@ function clearTrack(){
 
 function jumbleTrack(){
     for (let i:number = 0; i < SEQUENCE_LENGTH; i++){
-        sequencer[active_instrument_id][i] = Math.round(Math.random());
-        if (sequencer[active_instrument_id][i] && Math.random() > 0.66) {
+        var rand:Number = Math.random()
+        sequencer[active_instrument_id][i] = rand > 0.6;
+        if (rand > 0.85) {
             sequencer[active_instrument_id][i] = 2;
         }
     }

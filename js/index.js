@@ -68,8 +68,8 @@ function setupAudio() {
     compressor.threshold.setValueAtTime(0, audioContext.currentTime);
     compressor.knee.setValueAtTime(10, audioContext.currentTime);
     compressor.ratio.setValueAtTime(12, audioContext.currentTime);
-    compressor.attack.setValueAtTime(0, audioContext.currentTime);
-    compressor.release.setValueAtTime(0.25, audioContext.currentTime);
+    compressor.attack.setValueAtTime(0.005, audioContext.currentTime);
+    compressor.release.setValueAtTime(0.050, audioContext.currentTime);
     makeup = audioContext.createGain();
     makeup.gain.value = 1.0;
     compressor.connect(makeup);
