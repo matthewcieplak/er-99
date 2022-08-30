@@ -12,7 +12,7 @@ let jumble_button:HTMLButtonElement;
 const SEQUENCE_LENGTH:number = 16;
 
 function initSequence(id:string){
-    sequencer[id] = presets[0][id]; //[0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0];
+    sequencer[id] = preset_sequences[0][id]; //[0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0];
 }
 
 function toggleSequence(){
@@ -116,7 +116,7 @@ function sequencerSetup(){
     jumble_button.addEventListener('click', jumbleTrack);
 }
 
-var presets = [
+var preset_sequences = [
     {   //DISCO HOUSE
         'bd'  : [2,0,0,0, 2,0,0,0, 2,0,0,0, 2,0,0,0],
         'sd'  : [0,0,0,0, 1,0,0,1, 0,0,0,0, 0,0,0,0],

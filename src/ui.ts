@@ -77,23 +77,24 @@ function onMouseUp(event) {
 function onMouseMove(event) {
     if (clicking && clickedTarget) {
         var increment_value:number  = event.movementY - event.movementX;
-        var newValue = incrementControl(increment_value, clickedTarget)
-        var max = parseFloat(clickedTarget.getAttribute('data-range-max') || '100') || 100.0;
-
-
-        if (clickedTarget.getAttribute('data-show-actual-value') == 'yes') {
-            var display_value = newValue;
-        } else {
-            var display_value = 100.0 * (newValue / max);
-        }
-        var s = Math.floor(display_value).toString();
-        var display_string = s.padStart(3, '0');
-        screenDiv.innerText = display_string; 
-
+        var newValue = moveControl(increment_value, clickedTarget)
+        
+        if (clickedInstrument) {
+            setInstrumentParameter(clickedInstrument, clickedParam, newValue);
+            //clickedInstrument[clickedParam] = newValue * scalar;
+        } else if (clickedMaster) {
+            switch (clickedParam) {
+                case 'volume' : mainGainNode.gain.value = newValue; break;
+                case 'tempo'  : tempo = newValue; tempoInMs = 60 * 1000 / (4 * tempo); break;
+                case 'compression' : compressor.threshold.value = newValue * -1; makeup.gain.value = 1.0 + (newValue / 40); break; // console.log(makeup.gain.value); break;
+            }
+        } 
+    
+        return newValue;
     }
 }
 
-function incrementControl(increment_value:number, target:any) {
+function moveControl(increment_value:number, target:any) {
     var min = parseFloat(target.getAttribute('data-range-min') || '0') || 0.0;
     var max = parseFloat(target.getAttribute('data-range-max') || '100') || 100.0;
     var increment = (max - min) / 100.0;
@@ -109,25 +110,37 @@ function incrementControl(increment_value:number, target:any) {
         scalar = (newValue / max - min);
     }
 
-    if (clickedInstrument) {
-        clickedInstrument[clickedParam] = newValue * scalar;
-    } else if (clickedMaster) {
-        globalParams[clickedParam] = newValue * scalar;
-        switch (clickedParam) {
-            case 'volume' : mainGainNode.gain.value = newValue; break;
-            case 'tempo'  : tempo = newValue; tempoInMs = 60 * 1000 / (4 * tempo); break;
-            case 'compression' : compressor.threshold.value = newValue * -1; makeup.gain.value = 1.0 + (newValue / 40); console.log(makeup.gain.value); break;
-        }
-    } 
+    var max = parseFloat(target.getAttribute('data-range-max') || '100') || 100.0;
 
-    return newValue;
 
+    if (target.getAttribute('data-show-actual-value') == 'yes') {
+        var display_value = newValue;
+    } else {
+        var display_value = 100.0 * (newValue / max);
+    }
+    var s = Math.floor(display_value).toString();
+    var display_string = s.padStart(3, '0');
+    screenDiv.innerText = display_string; 
+
+    return newValue; // * scalar;
+}    
+
+function setInstrumentParameter(instrument:Instrument, parameter:string, value:Number, ){
+    instrument[parameter] = value;
 }
 
 function initializeKnobPositions(){
-    var controls = document.querySelectorAll("button.knob");
+    var controls = document.getElementsByClassName("knob");
+    let value:Number = 0;
     for (let i = 0; i < controls.length; i++) {
-        incrementControl(0, controls[i]);
+        value = moveControl(0, controls[i]);
+        var instrument:Instrument = instruments_table[controls[i].getAttribute('data-instrument')];
+        var param:string = controls[i].getAttribute('data-param');
+        if (instrument && param) {
+            setInstrumentParameter(instrument, param, value);
+            console.log(instrument.id, param, value);
+        }
+        
     }
 }
 
@@ -153,12 +166,16 @@ function setup(){
     document.body.addEventListener('mousemove', onMouseMove);
     document.body.addEventListener('mouseup', onMouseUp);
 
+    document.getElementById('save_preset').addEventListener('click', savePreset);
+    // document.getElementById('load_preset').addEventListener('click', loadPreset);
+
     // volumeControl = document.querySelector("input[name='volume']");
     // volumeControl.addEventListener("change", changeVolume, false);
+    initializePresets();
 
     sequencerSetup();
     // initializeKnobPositions();
-    
+
 
     active_instrument_id = 'bd';
     selectInstrument();

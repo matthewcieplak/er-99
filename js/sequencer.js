@@ -11,7 +11,7 @@ let clear_button;
 let jumble_button;
 const SEQUENCE_LENGTH = 16;
 function initSequence(id) {
-    sequencer[id] = presets[0][id]; //[0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0];
+    sequencer[id] = preset_sequences[0][id]; //[0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0];
 }
 function toggleSequence() {
     if (playing) {
@@ -103,7 +103,7 @@ function sequencerSetup() {
     jumble_button = document.querySelector('#jumble_button');
     jumble_button.addEventListener('click', jumbleTrack);
 }
-var presets = [
+var preset_sequences = [
     {
         'bd': [2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0],
         'sd': [0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],

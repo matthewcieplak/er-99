@@ -1,5 +1,5 @@
 body {
-    color: #545c79;
+    color: #eee;
     /* font-family: Arial, Helvetica, sans-serif; */
     font-family: 'Space Mono', monospace;
     background: #333;
@@ -15,6 +15,8 @@ html{
 }
 
 #wrapper{
+    color: #545c79;
+
     background-color: #e8e4da;
     /* border: 2px solid #d8d4ca; */
     padding: 1px 20px;
@@ -113,9 +115,7 @@ button {
     padding-left: 0;
 } */
 
-.control_group:last-of-type{
-    /* padding-right: 0; */
-}
+
 
 .control_divider{
     height: 280px;
@@ -461,6 +461,98 @@ button {
 
 
 
+
+
+
+
+
+
+/* /////////////////////////
+/////////////////////////////
+////// BELOW THE DRUM MACHINE
+/////////////////////////////
+/////////////////////////////
+ */
+
+
+
+.postscript{
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+
+.column{
+    width: 50%; 
+    float: left;
+    box-sizing: border-box;
+}
+
+.column:nth-of-type(n-1){
+    padding-right: 10px;
+}
+
+.simple_button{
+    font-family: 'Space Mono', monospace;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border: 0px none;
+    border-radius: 10px;
+    background: #e8e4da;
+    position: relative;
+}
+
+.simple_button:hover{
+    background: #dcd7cb;
+    box-shadow: 0 0 5px rgba(255,255,255,0.5);
+}
+
+.simple_button:active{
+    background: #c6c2b8;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+    top: 1px;
+}
+
+#preset_list li{
+    list-style-type: decimal;
+    padding: 5px;
+    position: relative;
+}
+
+#preset_list li .preset_delete{
+    display: none;
+}
+
+
+#save_preset{
+    float: right;
+    margin-top: 10px;
+}
+
+
+#preset_list li:hover{
+    background: rgba(255,255,255,0.3); 
+    cursor: pointer;
+}
+
+#preset_list li:active{
+    background: rgba(100,100,100,0.5); 
+    cursor: pointer;
+}
+
+#preset_list li:hover .preset_delete{
+    display: inline-block;
+    position: absolute;
+    right: 5px;
+}
+
+#preset_list li:hover .preset_delete:hover{
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+
+
+
 /* iPads (portrait and landscape) ----------- */
 @media only screen and (max-width : 1200px) and (min-width: 660px){
   /* Styles */
@@ -509,7 +601,6 @@ button {
         width: 58px;
         height: 58px;
     }
-
 
 }
 
