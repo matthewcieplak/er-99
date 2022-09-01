@@ -175,6 +175,7 @@ function setup(){
     initializePresets();
 
     sequencerSetup();
+    midiSetup();
     // initializeKnobPositions();
 
 

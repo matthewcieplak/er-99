@@ -76,15 +76,15 @@ function playNextStep(){
         
     }
 
-    sequencerTimeout = setTimeout(playNextStep, nextStepInMs);
+    if (playing) sequencerTimeout = setTimeout(playNextStep, nextStepInMs);
     updateSequenceDisplay();
 }
 
-function updateSequenceDisplay(){
+function updateSequenceDisplay(force_active = false){
     var step_value = 0;
     document.querySelectorAll('.sequencer_button').forEach(function (button, idx) {
         step_value = sequencer[active_instrument_id][idx];
-        if ((idx == current_step && playing)) {
+        if (idx == current_step && (playing || force_active)) {
             button.className = 'sequencer_button' + (step_value == 0 ? ' playing' : '');
         }
         else if (sequencer[active_instrument_id][idx] > 0) {
