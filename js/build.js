@@ -862,6 +862,8 @@ let sequence_bars = 1;
 let visible_bar = 0;
 let SEQUENCE_LENGTH = 16;
 let sequence_max_length = 16;
+let waitingForLengthInput = false;
+let barButtonFlasher;
 function initSequence(id) {
     sequencer[id] = preset_sequences[0][id]; //[0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0];
 }
@@ -937,9 +939,11 @@ function updateSequenceDisplay(force_active = false) {
             button.className = 'sequencer_button';
         }
     });
-    var current_bar = Math.floor(current_step / 16);
-    for (var i = 0; i < bar_buttons.length; i++) {
-        bar_buttons[i].className = 'led_button bar_button' + (i == current_bar ? ' dim' : '') + (i == visible_bar ? ' active' : '');
+    if (!waitingForLengthInput) {
+        var current_bar = Math.floor(current_step / 16);
+        for (var i = 0; i < bar_buttons.length; i++) {
+            bar_buttons[i].className = 'led_button bar_button' + (i == current_bar ? ' dim' : '') + (i == visible_bar ? ' active' : '');
+        }
     }
 }
 function onSequencerButtonClick(event) {
@@ -958,6 +962,13 @@ function onSequencerButtonClick(event) {
 }
 function onBarButtonClick(event) {
     let bar = parseInt(event.currentTarget.value);
+    if (waitingForLengthInput) { //when setting sequence length
+        flashBarButtons(false);
+        setSequenceLength(bar + 1);
+        clearTimeout(barButtonFlasher);
+        waitingForLengthInput = false;
+        updateSequenceDisplay();
+    }
     if (bar != visible_bar) {
         visible_bar = bar;
         if ((bar + 1) * 16 > SEQUENCE_LENGTH)
@@ -1000,6 +1011,26 @@ function copyBar(sourceBar = 1, destBar) {
     }
     return;
 }
+function onLengthButtonClick() {
+    if (waitingForLengthInput) {
+        flashBarButtons(false);
+        clearTimeout(barButtonFlasher);
+        waitingForLengthInput = false;
+        updateSequenceDisplay();
+    }
+    waitingForLengthInput = true;
+    flashBarButtons(true);
+}
+function flashBarButtons(on = true) {
+    if (waitingForLengthInput == false) {
+        clearTimeout(barButtonFlasher);
+        return;
+    }
+    for (let i = 0; i < bar_buttons.length; i++) {
+        bar_buttons[i].className = 'led_button bar_button ' + (on ? 'active' : '');
+    }
+    barButtonFlasher = setTimeout(flashBarButtons, 300, !on);
+}
 function sequencerSetup() {
     document.querySelector('#sequencer').addEventListener('click', onSequencerButtonClick);
     start_button = document.querySelector('#start_button');
@@ -1008,6 +1039,8 @@ function sequencerSetup() {
     clear_button.addEventListener('click', clearTrack);
     jumble_button = document.querySelector('#jumble_button');
     jumble_button.addEventListener('click', jumbleTrack);
+    var length_button = document.querySelector('#length_button');
+    length_button.addEventListener('click', onLengthButtonClick);
     bar_buttons = document.querySelectorAll('.bar_button');
     for (let i = 0; i < bar_buttons.length; i++) {
         bar_buttons[i].addEventListener('click', onBarButtonClick);

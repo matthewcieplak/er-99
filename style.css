@@ -560,7 +560,7 @@ button {
     margin-bottom: 30px;
 }
 
-.led_button.dim{
+.led_button.dim, .led_button.dim:hover{
     background-image: radial-gradient(rgb(212, 212, 212), rgb(165, 165, 165), rgb(132, 132, 132));
 }
 
