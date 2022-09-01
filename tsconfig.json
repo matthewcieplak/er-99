@@ -3,6 +3,7 @@
         "target" : "esnext",
         "watch"  : true,
         "lib"    : ["DOM", "es2017"],
-        "outDir" : "js"
+        "outDir" : "js",
+        "outFile" : "js/build.js"
     }
 }
