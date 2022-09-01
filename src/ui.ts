@@ -87,6 +87,8 @@ function onMouseMove(event) {
             switch (clickedParam) {
                 case 'volume' : mainGainNode.gain.value = newValue; break;
                 case 'tempo'  : tempo = newValue; tempoInMs = 60 * 1000 / (4 * tempo); break;
+                case 'swing'  : globalParams.swing = newValue; break;
+                case 'globalAccent'  : globalParams.globalAccent = newValue; break;
                 case 'compression' : compressor.threshold.value = newValue * -1; makeup.gain.value = 1.0 + (newValue / 40); break; // console.log(makeup.gain.value); break;
             }
         } 

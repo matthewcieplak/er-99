@@ -15,8 +15,9 @@
     <script type="text/javascript" src="js/index.js"></script> -->
     <script type="text/javascript" src="js/build.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Exo:wght@800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="wrapper">
@@ -334,60 +335,88 @@
 
         
         <div id="master_controls">
-            <div class="master_control">
-                <button id="start_button" class="big_button" data-function="start">
-                    <span class="squareled"></span>
-                </button><br />
-                Start
+            <div id="master_controls_0">
+                <div class="master_control">
+                    <button id="start_button" class="big_button" data-function="start">
+                        <span class="squareled"></span>
+                    </button><br />
+                    Start
+                </div>
+
+                <div class="master_control hidden-sm">
+                    <button id="clear_button" class="big_button" data-function="clearTrack">
+                    </button><br />
+                    Clear
+                </div>
+                
+                <div class="master_control hidden-sm hidden-md">
+                    <button id="jumble_button" class="big_button" data-function="jumbleTrack">
+                    </button><br />
+                    Jumble
+                </div>
             </div>
 
-            <div class="master_control hidden-sm">
-                <button id="clear_button" class="big_button" data-function="clearTrack">
-                </button><br />
-                Clear
-            </div>
-            
-            <div class="master_control hidden-sm">
-                <button id="jumble_button" class="big_button" data-function="jumbleTrack">
-                </button><br />
-                Jumble
+            <div id="master_controls_1">
+                <div class="master_control">
+                    <div id="screen">099</div>
+                </div>
             </div>
 
-            <div class="master_control">
-                <div id="screen">099</div>
+            <div id="master_controls_2">
+                <!--div class="master_control">
+                    <button class="knob" data-param="length" data-range-min="8" data-range-max="64" value="16" data-control="master" data-show-actual-value="yes" style="transform: rotate(-41.3deg);"><span class="indicator"></span></button>
+                    <br />Length
+                </div-->
+
+                <div class="master_control">
+                    <button name="bar_1" value="0" class="bar_button led_button active" ><span class="number">1</span></button>
+                    <button name="bar_2" value="1" class="bar_button led_button"><span class="number">2</span></button>
+                    <button name="bar_3" value="2" class="bar_button led_button"><span class="number">3</span></button>
+                    <button name="bar_4" value="3" class="bar_button led_button"><span class="number">4</span></button>
+                    
+                    <div class="shift">BARS</div>
+                </div>
+
+                <div class="master_control">
+                    <Button class="rect_button"></Button><br />
+                    Length
+                </div>
             </div>
 
-            <div class="master_control has_knob">
-                <button class="knob big_knob" data-param="tempo" data-range-min="50" data-range-max="200" value="120" data-control="master" data-show-actual-value="yes" style="transform: rotate(-41.3deg);"><span class="indicator"></span></button>
-                Tempo
+            <div id="master_controls_4">
+                <div class="master_control has_knob hidden-sm">
+                    <button class="knob big_knob" data-param="compression" data-control="master" data-range-min="0" data-range-max="40" value="0" style="transform: rotate(-140deg);"><span class="indicator"></span></button>
+                    Compress
+                </div>
+                <div class="master_control has_knob right">
+                    <button class="knob big_knob" data-param="volume" data-control="master" data-range-min="0" data-range-max="1.0" value="0.5 data-control="master"><span class="indicator"></span></button>
+                    Volume
+                </div>
             </div>
 
-            <div class="master_control has_knob hidden-sm">
-                <button class="knob big_knob" data-param="globalAccent" data-range-min="1.1" data-range-max="4.0" value="2.5" data-control="master" style="transform: rotate(-41.3deg);"><span class="indicator"></span></button>
-                Accent
+            <div id="master_controls_3">
+                <div class="master_control has_knob">
+                    <button class="knob big_knob" data-param="tempo" data-range-min="50" data-range-max="200" value="120" data-control="master" data-show-actual-value="yes" style="transform: rotate(-41.3deg);"><span class="indicator"></span></button>
+                    Tempo
+                </div>
+
+                <div class="master_control has_knob hidden-sm">
+                    <button class="knob big_knob" data-param="globalAccent" data-range-min="1.1" data-range-max="4.0" value="2.5" data-control="master" style="transform: rotate(-41.3deg);"><span class="indicator"></span></button>
+                    Accent
+                </div>
+
+                <div class="master_control has_knob hidden-sm">
+                    <button class="knob big_knob" data-param="swing" data-control="master" data-range-min="0" data-range-max="7" value="0" data-control="master" data-show-actual-value="yes" style="transform: rotate(-140deg);"><span class="indicator"></span></button>
+                    Swing
+                </div>
             </div>
 
-            <div class="master_control has_knob hidden-sm">
-                <button class="knob big_knob" data-param="swing" data-control="master" data-range-min="0" data-range-max="7" value="0" data-control="master" data-show-actual-value="yes" style="transform: rotate(-140deg);"><span class="indicator"></span></button>
-                Swing
-            </div>
-
-
-
-            <div class="master_control has_knob right">
-                <button class="knob big_knob" data-param="volume" data-control="master" data-range-min="0" data-range-max="1.0" value="0.5 data-control="master"><span class="indicator"></span></button>
-                Volume
-            </div>
-            <div class="master_control has_knob hidden-sm hidden-md right">
-                <button class="knob big_knob" data-param="compression" data-control="master" data-range-min="0" data-range-max="40" value="0" style="transform: rotate(-140deg);"><span class="indicator"></span></button>
-                Compress
-            </div>
-
+            <div class="clear"></div>
         </div>
 
         <div style="clear:both;"></div>
 
-        <div id="sequencer">
+        <div id="sequencer" class="clear">
             <div class="sequencer_button" data-step="1" id="sequencer_button_1"><span class="squareled"></span><span class="number">1</span></div>
             <div class="sequencer_button" data-step="2" id="sequencer_button_2"><span class="squareled"></span><span class="number">2</span></div>
             <div class="sequencer_button" data-step="3" id="sequencer_button_3"><span class="squareled"></span><span class="number">3</span></div>

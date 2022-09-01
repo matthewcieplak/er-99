@@ -94,6 +94,10 @@ h1, h2{
     font-size: 10px;
 }
 
+#midi_button{
+    top: -5px;
+}
+
 select{
     background: transparent;
     color: #666;
@@ -102,7 +106,8 @@ select{
 }
 
 .archive{
-    font-family: "Archive";
+    font-family: 'Exo', "Archive";
+    font-weight: 900;
 }
 
 button {
@@ -128,16 +133,18 @@ button {
 
 
 .shift {
-    background-color: #fd8505;
+    background-color: #f29d2b;
+    font-style: italic;
+    font-weight: 700;
 }
 
-.shift:hover{
+/* .shift:hover{
     background-color: #e77c09;
 }
 
 .shift:active{
     background-color: #c36d11;
-}
+} */
 
 .controls{
     margin: 0 -20px 0 -10px;
@@ -381,16 +388,27 @@ button {
 .rect_button{
     width: 30px;
     height: 16px;
-    background-image: url(img/plastic_texture_small.jpg);
-    background-size: 100%;
     display: inline-block;
     box-sizing: border-box;
     padding: 0;
     border: 1px solid rgb(0 0 0 / 29%);
-    box-shadow: 1px 1px 2px rgb(0 0 0 / 37%);
+    box-shadow: 1px 1px 2px rgb(0 0 0 / 70%);
     position: relative;
     top: 1px;
 }
+
+.rect_button:before{
+    content: '';
+    background-image: url(img/plastic_texture_small.jpg);
+    background-size: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30px;
+    height: 16px;
+    opacity: 0.5;
+}
+
 
 .rect_button:active{
     top: 2px;
@@ -420,13 +438,19 @@ button {
 }
 
 .active .squareled{
-    background: #c06401;
-    box-shadow: 0 0 14px rgba(252, 150, 1, 0.9);
+    /* box-shadow: inset 0 0 5px rgba(255, 66, 66, 0.99); */
+    /* background-image: radial-gradient(rgb(222, 112, 112), rgb(134, 23, 23)); */
+    background-image: radial-gradient(rgb(222, 58, 58), rgb(139, 29, 29));
+
+    background-color: rgba(240, 0, 0, 0.7);
+    box-shadow: 0 0 5px rgba(235, 52, 52, 0.9);
 }
 
-.playing .squareled{
-    background: #fd9e37;
-    box-shadow: 0 0 14px rgba(252, 150, 1, 0.9);
+.accent .squareled{
+    background-image: radial-gradient(rgb(219, 155, 155), rgb(225, 73, 73), rgb(192, 35, 35));
+    background-color: rgba(240, 0, 0, 0.7);
+    box-shadow: 0 0 8px rgba(235, 52, 52, 0.9);
+    /* box-shadow: 0 0 5px rgba(209, 5, 5, 0.9); */
 }
 
 .sequencer_button .number{
@@ -473,12 +497,20 @@ button {
 }
 
 #master_controls{
-    padding: 10px 0;
+    padding: 10px 0 0;
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-width: 1px 0;
     margin-top: 0px;
-    height: 90px;
+    min-height: 90px;
     margin-bottom: 10px;
+}
+
+#master_controls_1, #master_controls_2, #master_controls_3{
+    float: left;
+}
+
+#master_controls_4{
+    float: right;
 }
 
 .master_control{
@@ -487,6 +519,7 @@ button {
     float: left;
     padding-right: 20px;
     text-align: center;
+    margin-bottom: 12px;
 }
 
 .master_control.has_knob:before{
@@ -495,11 +528,6 @@ button {
     margin-left: 0;
     width: 68px;
     height: 68px;
-}
-
-.master_control:last-of-type{
-    float: right;
-    text-align: left;
 }
 
 #screen{
@@ -518,13 +546,50 @@ button {
     text-transform: uppercase;
 }
 
-.right{
-    float: right;
-    margin-right: 0;
+.led_button{
+    background-image: radial-gradient(rgb(87, 57, 57), rgb(130, 117, 117), rgb(90, 81, 81));
+    width: 20px;
+    height: 20px;
+    margin: 0 5px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgba(68, 68, 68, 0.35);
+    box-sizing: border-box;
+    overflow: visible;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.led_button.dim{
+    background-image: radial-gradient(rgb(212, 212, 212), rgb(165, 165, 165), rgb(132, 132, 132));
+}
+
+.led_button.active{
+    background-image: radial-gradient(rgb(255, 186, 186), rgb(188, 13, 13), rgb(162, 72, 72));
+    border-color: rgba(177, 57, 57, 0.5);
+    /* box-shadow: rgba(255, 66, 66, 0.66); */
+    box-shadow: 0 0 5px rgba(255, 61, 61, 0.7);
+
+}
+
+.led_button:hover{
+    background-image: radial-gradient(rgb(67, 43, 43), rgb(106, 93, 93), rgb(71, 62, 62));
+}
+
+.led_button.active:hover{
+    background-image: radial-gradient(rgb(236, 176, 176), rgb(173, 14, 14), rgb(155, 74, 74));
+}
+
+.led_button:active, .led_button.active:active{
+    background-image: radial-gradient(rgb(130, 79, 79), rgb(86, 42, 42), rgb(44, 36, 36));
 }
 
 
-
+.led_button .number{
+    position: relative;
+    top: 20px;
+    left: -4px;
+}
 
 
 
@@ -616,9 +681,36 @@ button {
 
 
 
+@media only screen and (max-width : 1250px){
+    #master_controls{
+        min-height: 170px;
+    }
+
+    #master_controls_2{
+        float: left;
+    }
+
+    #master_controls_3{
+        float: left;
+        clear: left;
+    }
+
+    .big_knob{
+        width: 60px;
+        height: 60px;
+        display: block;
+    }
+
+    .master_control.has_knob:before{
+        width: 58px;
+        height: 58px;
+    }
+    
+}
+
 
 /* iPads (portrait and landscape) ----------- */
-@media only screen and (max-width : 1200px) and (min-width: 660px){
+@media only screen and (max-width : 999px) and (min-width: 713px){
   /* Styles */
     .control_group{
         width: 24.6%;
@@ -655,24 +747,42 @@ button {
 
     .hidden-md{ display: none; }
 
-    .big_knob{
-        width: 60px;
-        height: 60px;
-        display: block;
+    #master_controls_2{
+        float: left;
     }
 
-    .master_control.has_knob:before{
-        width: 58px;
-        height: 58px;
+    #master_controls_3{
+        clear: left;
+        float: left;
     }
+
 
 }
 
 
 /* Smartphones (landscape) ----------- */
-@media only screen and (max-width : 660px) {
+@media only screen and (max-width : 712px) {
+    body{
+        padding: 5px;
+    }
+
     #bg{
-        background-image: none;
+        /* background-image: none; */
+        background-size: auto 100%;
+        padding: 0;
+    }
+
+    #wrapper{
+        border-width: 2px;
+        margin: 10px 0;
+    }
+
+    .control br{
+        display: none;
+    }
+
+    .control:before{
+        display: none;
     }
 
     .control_group{
@@ -693,7 +803,7 @@ button {
         border-width: 0px 2px 3px 2px;
         margin-right: 1px;
         width: 12.2%;
-        margin-bottom: 0;
+        margin-bottom: 30px;
     }
 
     .hidden-md, .hidden-sm{ display: none; }
@@ -709,9 +819,9 @@ button {
         height: 53px;
     }
 
-    .sequencer_button .number{
-        top: 9px;
-    }
+    /* .sequencer_button .number{
+        top: 9px !important;
+    } */
 
     #screen{
         font-size: 56px;
@@ -719,6 +829,24 @@ button {
         width: 130px;
         margin-bottom: 20px;
     }
+
+    .led_button{
+        margin: 0 2px 25px;
+    }
+
+    #master_controls_2{
+        float: right;
+    }
+
+    #master_controls_3{
+        clear: left;
+        float: left;
+    }
+
+    #master_controls_4{
+        clear: right;
+    }
+
 }
 
 

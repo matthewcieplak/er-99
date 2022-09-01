@@ -857,7 +857,11 @@ let active_instrument_id = 'bd';
 let start_button;
 let clear_button;
 let jumble_button;
-const SEQUENCE_LENGTH = 16;
+let bar_buttons;
+let sequence_bars = 1;
+let visible_bar = 0;
+let SEQUENCE_LENGTH = 16;
+let sequence_max_length = 16;
 function initSequence(id) {
     sequencer[id] = preset_sequences[0][id]; //[0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0];
 }
@@ -921,17 +925,22 @@ function playNextStep() {
 function updateSequenceDisplay(force_active = false) {
     var step_value = 0;
     document.querySelectorAll('.sequencer_button').forEach(function (button, idx) {
-        step_value = sequencer[active_instrument_id][idx];
-        if (idx == current_step && (playing || force_active)) {
-            button.className = 'sequencer_button' + (step_value == 0 ? ' playing' : '');
+        var step = idx + visible_bar * 16;
+        step_value = sequencer[active_instrument_id][step];
+        if (step == current_step && (playing || force_active)) {
+            button.className = 'sequencer_button' + (step_value == 0 ? '  active' : '');
         }
-        else if (sequencer[active_instrument_id][idx] > 0) {
-            button.className = 'sequencer_button ' + (step_value == 1 ? 'active' : 'playing');
+        else if (sequencer[active_instrument_id][step] > 0) {
+            button.className = 'sequencer_button ' + (step_value == 2 ? 'accent' : 'active');
         }
         else {
             button.className = 'sequencer_button';
         }
     });
+    var current_bar = Math.floor(current_step / 16);
+    for (var i = 0; i < bar_buttons.length; i++) {
+        bar_buttons[i].className = 'led_button bar_button' + (i == current_bar ? ' dim' : '') + (i == visible_bar ? ' active' : '');
+    }
 }
 function onSequencerButtonClick(event) {
     var target = event.target;
@@ -939,13 +948,57 @@ function onSequencerButtonClick(event) {
         target = event.target.parent;
     }
     if (target.getAttribute('data-step')) {
-        var step = parseInt(event.target.getAttribute('data-step')) - 1;
+        var step = parseInt(event.target.getAttribute('data-step')) - 1 + visible_bar * 16;
         sequencer[active_instrument_id][step] += 1;
         if (sequencer[active_instrument_id][step] > 2)
             sequencer[active_instrument_id][step] = 0;
         updateSequenceDisplay();
         // console.log(step);
     }
+}
+function onBarButtonClick(event) {
+    let bar = parseInt(event.currentTarget.value);
+    if (bar != visible_bar) {
+        visible_bar = bar;
+        if ((bar + 1) * 16 > SEQUENCE_LENGTH)
+            setSequenceLength(bar + 1);
+        updateSequenceDisplay();
+        for (var i = 0; i < bar_buttons.length; i++) {
+            bar_buttons[i].className = 'led_button bar_button';
+        }
+        event.currentTarget.className = 'led_button bar_button active';
+    }
+}
+function setSequenceLength(bars = 1) {
+    SEQUENCE_LENGTH = bars * 16;
+    sequence_bars = bars;
+    if (SEQUENCE_LENGTH > sequence_max_length) {
+        if (sequence_max_length > 16 && bars == 4) {
+            copyBar(2, 4);
+        }
+        else {
+            let i = 2;
+            while (i <= 4) {
+                if (i * 16 > sequence_max_length) {
+                    var b = i - 2;
+                    if (i - 2 < 1)
+                        b = 1;
+                    copyBar(b, i);
+                }
+                i++;
+            }
+        }
+        sequence_max_length = SEQUENCE_LENGTH;
+    }
+    screenDiv.innerText = SEQUENCE_LENGTH.toString();
+}
+function copyBar(sourceBar = 1, destBar) {
+    for (let inst in sequencer) {
+        for (let i = 0; i < 16; i++) {
+            sequencer[inst][(destBar - 1) * 16 + i] = sequencer[inst][(sourceBar - 1) * 16 + i];
+        }
+    }
+    return;
 }
 function sequencerSetup() {
     document.querySelector('#sequencer').addEventListener('click', onSequencerButtonClick);
@@ -955,6 +1008,10 @@ function sequencerSetup() {
     clear_button.addEventListener('click', clearTrack);
     jumble_button = document.querySelector('#jumble_button');
     jumble_button.addEventListener('click', jumbleTrack);
+    bar_buttons = document.querySelectorAll('.bar_button');
+    for (let i = 0; i < bar_buttons.length; i++) {
+        bar_buttons[i].addEventListener('click', onBarButtonClick);
+    }
 }
 var preset_sequences = [
     {
@@ -1055,6 +1112,12 @@ function onMouseMove(event) {
                 case 'tempo':
                     tempo = newValue;
                     tempoInMs = 60 * 1000 / (4 * tempo);
+                    break;
+                case 'swing':
+                    globalParams.swing = newValue;
+                    break;
+                case 'globalAccent':
+                    globalParams.globalAccent = newValue;
                     break;
                 case 'compression':
                     compressor.threshold.value = newValue * -1;
