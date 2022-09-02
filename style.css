@@ -7,7 +7,7 @@ body {
     margin: 0;
     padding: 10px;
     box-sizing: border-box;
-    background-image: linear-gradient(45deg, rgb(48, 139, 146),rgb(46, 142, 110));
+    background-image: linear-gradient(90deg, rgb(48, 139, 146),rgb(46, 142, 110));
     background-size: cover;
 }
 
