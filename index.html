@@ -385,28 +385,28 @@
 
             <div id="master_controls_4">
                 <div class="master_control has_knob hidden-sm">
-                    <button class="knob big_knob" data-param="compression" data-control="master" data-range-min="0" data-range-max="40" value="0" style="transform: rotate(-140deg);"><span class="indicator"></span></button>
+                    <button name="master_compression" class="knob big_knob" data-param="compression" data-control="master" data-range-min="0" data-range-max="40" value="0" style="transform: rotate(-140deg);"><span class="indicator"></span></button>
                     Compress
                 </div>
                 <div class="master_control has_knob right">
-                    <button class="knob big_knob" data-param="volume" data-control="master" data-range-min="0" data-range-max="1.0" value="0.5 data-control="master"><span class="indicator"></span></button>
+                    <button name="master_volume" class="knob big_knob" data-param="volume" data-control="master" data-range-min="0" data-range-max="1.0" value="0.5 data-control="master"><span class="indicator"></span></button>
                     Volume
                 </div>
             </div>
 
             <div id="master_controls_3">
                 <div class="master_control has_knob">
-                    <button class="knob big_knob" data-param="tempo" data-range-min="50" data-range-max="200" value="120" data-control="master" data-show-actual-value="yes" style="transform: rotate(-41.3deg);"><span class="indicator"></span></button>
+                    <button name="master_tempo" class="knob big_knob" data-param="tempo" data-range-min="50" data-range-max="200" value="120" data-control="master" data-show-actual-value="yes" style="transform: rotate(-41.3deg);"><span class="indicator"></span></button>
                     Tempo
                 </div>
 
                 <div class="master_control has_knob hidden-sm">
-                    <button class="knob big_knob" data-param="globalAccent" data-range-min="1.1" data-range-max="4.0" value="2.5" data-control="master" style="transform: rotate(-41.3deg);"><span class="indicator"></span></button>
+                    <button name="master_globalAccent" class="knob big_knob" data-param="globalAccent" data-range-min="1.1" data-range-max="4.0" value="2.5" data-control="master" style="transform: rotate(-41.3deg);"><span class="indicator"></span></button>
                     Accent
                 </div>
 
                 <div class="master_control has_knob hidden-sm">
-                    <button class="knob big_knob" data-param="swing" data-control="master" data-range-min="0" data-range-max="7" value="0" data-control="master" data-show-actual-value="yes" style="transform: rotate(-140deg);"><span class="indicator"></span></button>
+                    <button name="master_swing" class="knob big_knob" data-param="swing" data-control="master" data-range-min="0" data-range-max="7" value="0" data-control="master" data-show-actual-value="yes" style="transform: rotate(-140deg);"><span class="indicator"></span></button>
                     Swing
                 </div>
             </div>
@@ -442,28 +442,34 @@
         <div style="clear: both;"></div>
     </div>
     <div class="postscript">
+
         <div class="column">
-            <h3>Instructions</h3>
-            <p>ER</p>
+            <h3 class="left">Sequences</h3>
+            <button id="save_sequence" class="simple_button">Save</button> 
+
+            <textarea id="sequence_text" style="display: none;">JSON HERE</textarea>
+            <ul id="sequence_list" class="preset_list clear"></ul>
         </div>
 
         <div class="column">
+            <h3 class="left">Sound Presets</h3>
             <button id="save_preset" class="simple_button">Save</button> 
 
-            <h3>Sound Presets</h3>
-
             <textarea id="preset_text" style="display: none;">JSON HERE</textarea>
-            <!-- <button id="load_preset">Load</button> -->
-            <!-- <form name="preset_list_form" action="#"> -->
-                <ul id="preset_list"></ul>
-            <!-- </form> -->
+            <ul id="preset_list" class="preset_list clear"></ul>
+        </div>
+
+        <div class="column">
+            <h3>What Is This?</h3>
+            <p><strong>ER-99</strong> is a web-based drum machine. All of the drums are synthesized using the WebAudio API. The hi-hats, crash, and ride cymbals are produced from sampled audio.
+            <p>The complete source code is <a href="https://github.com/matthewcieplak/er-99">available on Github</a>.</p>
+            <p>ER</p>
         </div>
 
         <div class="column">
             <h3>Who Made This?</h3>
             <p>This page was built by <a href="https://youtube.com/c/extralifedisco">Extralife</a> (builder of the <a href="https://store.extralifeinstruments.com">Super Sixteen Eurorack Sequencer</a>) to celebrate 9/09 day 2022
-            <p>All of the drums are synthesized using the WebAudio API. The hi-hats, crash, and ride cymbals are produced from sampled audio.
-            <p>The complete source code is <a href="https://github.com/matthewcieplak/er-99">available on Github</a>.</p>
+
         </div>
         <p style="text-align: center; clear: both; padding: 100px 0 50px;">&copy; Extralife Instruments 2022</p>
 

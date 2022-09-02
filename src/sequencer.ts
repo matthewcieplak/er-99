@@ -1,9 +1,9 @@
 //SEQUENCER STUFF
-let sequencer = {};
+let sequencer = { "bars" : 1 };
 let playing = false;
 let tempo = 120;
 let tempoInMs = 60 * 1000 / (4 * tempo);
-let current_step = 10;
+let current_step = -1;
 let sequencerTimeout:number;
 let active_instrument_id:string = 'bd';
 let start_button:HTMLButtonElement;
@@ -18,7 +18,7 @@ let waitingForLengthInput = false;
 let barButtonFlasher;
 
 function initSequence(id:string){
-    sequencer[id] = preset_sequences[0][id]; //[0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0];
+    sequencer[id] = new Array(64).fill(0); //preset_sequences[0][id]; //[0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0];
 }
 
 function toggleSequence(){
@@ -50,10 +50,14 @@ function clearTrack(){
 
 function jumbleTrack(){
     for (let i:number = 0; i < SEQUENCE_LENGTH; i++){
-        var rand:Number = Math.random()
-        sequencer[active_instrument_id][i] = rand > 0.6;
-        if (rand > 0.85) {
-            sequencer[active_instrument_id][i] = 2;
+        if (i < 16) {
+            var rand:Number = Math.random()
+            sequencer[active_instrument_id][i] = rand > 0.6;
+            if (rand > 0.85) {
+                sequencer[active_instrument_id][i] = 2;
+            }
+        } else {
+            sequencer[active_instrument_id][i] = sequencer[active_instrument_id][i-16];
         }
     }
     screenDiv.innerText = 'JMB';
@@ -222,18 +226,38 @@ function sequencerSetup(){
     }
 }
 
-var preset_sequences = [
-    {   //DISCO HOUSE
-        'bd'  : [2,0,0,0, 2,0,0,0, 2,0,0,0, 2,0,0,0],
-        'sd'  : [0,0,0,0, 1,0,0,1, 0,0,0,0, 0,0,0,0],
-        'lt'  : [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
-        'mt'  : [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
-        'ht'  : [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
-        'rs'  : [0,0,0,0, 0,0,1,0, 0,1,0,0, 1,0,0,2],
-        'hc'  : [0,0,0,0, 1,0,0,0, 0,0,0,1, 0,0,0,0],
-        'chh' : [0,0,2,1, 0,0,1,0, 0,0,2,1, 0,0,0,0],
-        'ohh' : [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,1,0],
-        'rc'  : [1,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],       
-        'cr'  : [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0]
+
+function loadSequenceCallback(preset){
+    for (let key in preset) {
+        sequencer[key] = preset[key];
+        
+        switch(key){
+        case 'bars': 
+            setSequenceLength(preset[key]);
+            updateSequenceDisplay();
+            break;
+        case 'tempo':
+            tempo = preset[key]; tempoInMs = 60 * 1000 / (4 * tempo);
+        case 'swing':
+        case 'globalAccent':
+            //debugger;
+            globalParams[key] = preset[key];
+            initializeKnobPositions();
+            let knob = document.querySelector(`button[name="master_${key}"]`);
+            knob.setAttribute('value', preset[key]);
+            break;
+        }
     }
-];
+    initializeKnobPositions();
+    updateSequenceDisplay();
+}
+
+function saveSequenceCallback(){
+    sequencer["bars"] = sequence_bars;
+    sequencer["tempo"] = globalParams.tempo;
+    sequencer["swing"] = globalParams.swing;
+    sequencer["globalAccent"] = globalParams.globalAccent;
+    return sequencer;
+}
+
+var preset_sequences = {};

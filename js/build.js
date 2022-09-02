@@ -402,20 +402,17 @@ function setupAudio() {
         instruments_table[instrument.id] = instrument;
         setupInstrument(instrument);
         initSequence(instrument.id);
-        // sequencer[instrument.id][Math.floor(Math.random() * 16)] = 1;        
     }
     for (let generator of generators) {
         instruments_table[generator.id] = generator;
         setupGenerator(generator);
         initSequence(generator.id);
-        sequencer[generator.id][Math.floor(Math.random() * 16)] = 1;
     }
     for (let sampler of samplers) {
         instruments_table[sampler.id] = sampler;
         initSequence(sampler.id);
         if (sampler.id == 'ohh')
             initSequence('chh');
-        // sequencer[sampler.id][Math.floor(Math.random() * 16)] = 1; //randomize (todo delete and add presets)
         setupSampler(sampler);
     }
     document.removeEventListener("keydown", setupAudio);
@@ -677,7 +674,7 @@ function onMIDIMessage(event) {
         // if (playing) {
         //   toggleSequence();
         // }
-        current_step = -1;
+        current_step = 16;
         midi_ppqn_counter = 5;
     }
 }
@@ -728,7 +725,7 @@ function midiSetup() {
     channel_list.addEventListener('change', onMidiChannelChange);
 }
 class PresetList {
-    presets = [];
+    presets = {};
     presetList = null;
     saveButton = null;
     user_preset_ids = [];
@@ -746,10 +743,10 @@ class PresetList {
         this.initializePresets();
     }
     savePreset() {
-        let preset = savePresetCallback.call(this);
+        let preset = this.savePresetCallback.call(this);
         // let presetText = document.getElementById('preset_text') as HTMLTextAreaElement;
         // presetText.value =  JSON.stringify(preset);
-        this.createPreset(preset, `Preset ${this.presets.length}`, 'user', true);
+        this.createPreset(preset, `${this.storageKey}-${Object.keys(this.presets).length}`, 'user', true);
     }
     loadPreset(preset) {
         this.loadPresetCallback.call(this, preset);
@@ -757,7 +754,7 @@ class PresetList {
     loadUserPreset(preset_id) {
         // var preset = user_presets[id];
         // todo get from local storage
-        this.loadPreset(JSON.parse(localStorage.getItem(`preset-${preset_id}`)));
+        this.loadPreset(JSON.parse(localStorage.getItem(`${this.storageKey}-${preset_id}`)));
     }
     loadFactoryPreset(preset_id) {
         // var preset = presets[i];
@@ -770,8 +767,8 @@ class PresetList {
                 break;
             }
         }
-        localStorage.setItem('user-preset-ids', JSON.stringify(this.user_preset_ids));
-        localStorage.removeItem(`preset-${id}`);
+        localStorage.setItem(`user-${this.storageKey}-ids`, JSON.stringify(this.user_preset_ids));
+        localStorage.removeItem(`${this.storageKey}-${id}`);
     }
     clickPreset(event) {
         let preset_id = event.target.getAttribute('data-preset-id');
@@ -789,7 +786,7 @@ class PresetList {
             }
         }
     }
-    createPresetNameEditor(presetLi, preset) {
+    createPresetNameEditor(presetLi, localPreset) {
         var presetName = document.createElement('INPUT');
         presetName.type = 'text';
         // presetName.name = `preset_name_${}`;
@@ -797,23 +794,19 @@ class PresetList {
         presetLi.appendChild(presetName);
         this.presetList.insertBefore(presetLi, this.presetList.firstChild);
         let presetInput = presetName;
-        presetName.value = `Preset ${(Object.keys(this.presets).length + this.user_preset_ids.length).toString()}`;
+        presetName.value = `${this.storageKey.charAt(0).toUpperCase() + this.storageKey.slice(1)} ${(Object.keys(this.presets).length + this.user_preset_ids.length).toString()}`;
         presetName.autocomplete = presetName.name;
         presetName.focus();
         presetName.addEventListener('blur', function (event) {
             var id = presetName.value;
             presetName.parentElement.setAttribute('data-preset-id', id);
-            // presetLi.innerText = id;
-            // var nameSpan = document.createElement('');
-            // nameSpan.innerText = presetName.name;
-            // presetLi.insertBefore(nameSpan, presetName);
             presetLi.prepend(id);
             presetName.style.display = 'none';
             presetName.remove();
-            //save to local storag;
+            //save to local storage
             this.user_preset_ids.push(id);
-            localStorage.setItem('user-preset-ids', JSON.stringify(this.user_preset_ids));
-            localStorage.setItem(`preset-${id}`, JSON.stringify(preset));
+            localStorage.setItem(`user-${this.storageKey}-ids`, JSON.stringify(this.user_preset_ids));
+            localStorage.setItem(`${this.storageKey}-${id}`, JSON.stringify(localPreset));
         }.bind(this));
         return presetName;
     }
@@ -842,7 +835,7 @@ class PresetList {
     }
     initializePresets() {
         var request = new XMLHttpRequest();
-        request.open("GET", "presets.json", true);
+        request.open("GET", `${this.storageKey}s.json`, true);
         request.responseType = "json";
         // this.presetList = document.getElementById('preset_list');
         request.onload = function () {
@@ -850,11 +843,11 @@ class PresetList {
             for (let key in request.response) {
                 this.createPreset(this.presets[key], key, 'factory');
             }
-            this.user_preset_ids = JSON.parse(localStorage.getItem('user-preset-ids') || '[]');
+            this.user_preset_ids = JSON.parse(localStorage.getItem(`user-${this.storageKey}-ids`) || '[]');
             for (let i = 0; i < this.user_preset_ids.length; i++) {
                 var id = this.user_preset_ids[i];
-                this.presets[id] = JSON.parse(localStorage.getItem('preset-' + id));
-                this.createPreset(this.presets[id], id, 'user', false);
+                //this.presets[id] = {}; //JSON.parse(localStorage.getItem('preset-'+id));
+                this.createPreset({}, id, 'user', false);
             }
         }.bind(this);
         request.send();
@@ -910,11 +903,11 @@ function setupSampler(sampler) {
     request.send();
 }
 //SEQUENCER STUFF
-let sequencer = {};
+let sequencer = { "bars": 1 };
 let playing = false;
 let tempo = 120;
 let tempoInMs = 60 * 1000 / (4 * tempo);
-let current_step = 10;
+let current_step = -1;
 let sequencerTimeout;
 let active_instrument_id = 'bd';
 let start_button;
@@ -928,7 +921,7 @@ let sequence_max_length = 16;
 let waitingForLengthInput = false;
 let barButtonFlasher;
 function initSequence(id) {
-    sequencer[id] = preset_sequences[0][id]; //[0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0];
+    sequencer[id] = new Array(64).fill(0); //preset_sequences[0][id]; //[0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0];
 }
 function toggleSequence() {
     if (playing) {
@@ -955,10 +948,15 @@ function clearTrack() {
 }
 function jumbleTrack() {
     for (let i = 0; i < SEQUENCE_LENGTH; i++) {
-        var rand = Math.random();
-        sequencer[active_instrument_id][i] = rand > 0.6;
-        if (rand > 0.85) {
-            sequencer[active_instrument_id][i] = 2;
+        if (i < 16) {
+            var rand = Math.random();
+            sequencer[active_instrument_id][i] = rand > 0.6;
+            if (rand > 0.85) {
+                sequencer[active_instrument_id][i] = 2;
+            }
+        }
+        else {
+            sequencer[active_instrument_id][i] = sequencer[active_instrument_id][i - 16];
         }
     }
     screenDiv.innerText = 'JMB';
@@ -1109,21 +1107,38 @@ function sequencerSetup() {
         bar_buttons[i].addEventListener('click', onBarButtonClick);
     }
 }
-var preset_sequences = [
-    {
-        'bd': [2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0],
-        'sd': [0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-        'lt': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        'mt': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        'ht': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        'rs': [0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 2],
-        'hc': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-        'chh': [0, 0, 2, 1, 0, 0, 1, 0, 0, 0, 2, 1, 0, 0, 0, 0],
-        'ohh': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-        'rc': [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        'cr': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+function loadSequenceCallback(preset) {
+    for (let key in preset) {
+        sequencer[key] = preset[key];
+        switch (key) {
+            case 'bars':
+                setSequenceLength(preset[key]);
+                updateSequenceDisplay();
+                break;
+            case 'tempo':
+                tempo = preset[key];
+                tempoInMs = 60 * 1000 / (4 * tempo);
+            case 'swing':
+            case 'globalAccent':
+                //debugger;
+                globalParams[key] = preset[key];
+                initializeKnobPositions();
+                let knob = document.querySelector(`button[name="master_${key}"]`);
+                knob.setAttribute('value', preset[key]);
+                break;
+        }
     }
-];
+    initializeKnobPositions();
+    updateSequenceDisplay();
+}
+function saveSequenceCallback() {
+    sequencer["bars"] = sequence_bars;
+    sequencer["tempo"] = globalParams.tempo;
+    sequencer["swing"] = globalParams.swing;
+    sequencer["globalAccent"] = globalParams.globalAccent;
+    return sequencer;
+}
+var preset_sequences = {};
 var screenDiv;
 let clicking = false;
 let clickedTarget;
@@ -1258,11 +1273,17 @@ function initializeKnobPositions() {
     let value = 0;
     for (let i = 0; i < controls.length; i++) {
         value = moveControl(0, controls[i]);
-        var instrument = instruments_table[controls[i].getAttribute('data-instrument')];
-        var param = controls[i].getAttribute('data-param');
-        if (instrument && param) {
-            setInstrumentParameter(instrument, param, value);
-            // console.log(instrument.id, param, value);
+        let param = controls[i].getAttribute('data-param');
+        if (controls[i].getAttribute('data-control') == 'master') {
+            // set master param;
+            globalParams[param] = value;
+        }
+        else {
+            let instrument = instruments_table[controls[i].getAttribute('data-instrument')];
+            if (instrument && param) {
+                setInstrumentParameter(instrument, param, value);
+                // console.log(instrument.id, param, value);
+            }
         }
     }
 }
@@ -1304,7 +1325,7 @@ function setup() {
     document.body.addEventListener('mousemove', onMouseMove);
     document.body.addEventListener('mouseup', onMouseUp);
     presetList = new PresetList(document.getElementById('preset_list'), document.getElementById('save_preset'), 'preset', loadPresetCallback, savePresetCallback);
-    // sequenceList = new PresetList(document.getElementById('preset_list'), 'preset');
+    sequenceList = new PresetList(document.getElementById('sequence_list'), document.getElementById('save_sequence'), 'sequence', loadSequenceCallback, saveSequenceCallback);
     sequencerSetup();
     midiSetup();
     active_instrument_id = 'bd';

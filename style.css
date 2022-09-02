@@ -614,20 +614,21 @@ button {
 
 
 .postscript{
-    max-width: 1000px;
+    /* max-width: 1000px; */
     margin: 0 auto;
 }
 
 
 .column{
-    width: 50%; 
+    width: 29%; 
     float: left;
+    margin: 0 2%;
     box-sizing: border-box;
 }
 
-.column:nth-of-type(n-1){
+/* .column:nth-of-type(n-1){
     padding-right: 10px;
-}
+} */
 
 .simple_button{
     font-family: 'Space Mono', monospace;
@@ -650,45 +651,46 @@ button {
     top: 1px;
 }
 
-#preset_list{
+.preset_list{
     max-height: 250px;
     overflow-y: auto;
 }
 
-#preset_list li{
+.preset_list li{
     list-style-type: decimal;
     padding: 5px;
     position: relative;
 }
 
-#preset_list li .preset_delete{
+.preset_list li .preset_delete{
     display: none;
 }
 
 
-#save_preset{
-    float: right;
+#save_preset, #save_sequence{
+    float: left;
     margin-top: 10px;
+    margin-left: 15px;
 }
 
 
-#preset_list li:hover{
+.preset_list li:hover{
     background: rgba(255,255,255,0.3); 
     cursor: pointer;
 }
 
-#preset_list li:active{
+.preset_list li:active{
     background: rgba(100,100,100,0.5); 
     cursor: pointer;
 }
 
-#preset_list li:hover .preset_delete{
+.preset_list li:hover .preset_delete{
     display: inline-block;
     position: absolute;
     right: 5px;
 }
 
-#preset_list li:hover .preset_delete:hover{
+.preset_list li:hover .preset_delete:hover{
     text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
@@ -767,6 +769,11 @@ button {
     #master_controls_3{
         clear: left;
         float: left;
+    }
+
+    .column{
+        width: 45%; 
+        margin: 0 2%;
     }
 
 
@@ -860,6 +867,11 @@ button {
         clear: right;
     }
 
+    .column{
+        width: 45%; 
+        margin: 0 2%;
+    }
+
 }
 
 
@@ -885,6 +897,12 @@ button {
     }
 
     .hidden-md, .hidden-sm, .hidden-xs{ display: none;}
+
+    .column{
+        width: 100%; 
+        margin: 0;
+    }
+
 }
 
   

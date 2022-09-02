@@ -95,21 +95,18 @@ function setupAudio(){
         instruments_table[instrument.id] = instrument;
         setupInstrument(instrument);
         initSequence(instrument.id);
-        // sequencer[instrument.id][Math.floor(Math.random() * 16)] = 1;        
     }
 
     for (let generator of generators) {
         instruments_table[generator.id] = generator;
         setupGenerator(generator);
         initSequence(generator.id);
-        sequencer[generator.id][Math.floor(Math.random() * 16)] = 1;
     }
 
     for (let sampler of samplers) {
         instruments_table[sampler.id] = sampler;          
         initSequence(sampler.id);
         if (sampler.id == 'ohh') initSequence('chh');
-        // sequencer[sampler.id][Math.floor(Math.random() * 16)] = 1; //randomize (todo delete and add presets)
         setupSampler(sampler);
     }
 

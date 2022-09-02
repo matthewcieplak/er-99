@@ -56,7 +56,7 @@ function onMIDIMessage(event) {
       // if (playing) {
       //   toggleSequence();
       // }
-      current_step = -1;
+      current_step = 16;
       midi_ppqn_counter = 5;
     }
 }

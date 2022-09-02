@@ -139,11 +139,17 @@ function initializeKnobPositions(){
     let value:Number = 0;
     for (let i = 0; i < controls.length; i++) {
         value = moveControl(0, controls[i]);
-        var instrument:Instrument = instruments_table[controls[i].getAttribute('data-instrument')];
-        var param:string = controls[i].getAttribute('data-param');
-        if (instrument && param) {
-            setInstrumentParameter(instrument, param, value);
-            // console.log(instrument.id, param, value);
+        let param:string = controls[i].getAttribute('data-param');
+
+        if (controls[i].getAttribute('data-control') == 'master') {
+            // set master param;
+            globalParams[param] = value;
+        } else {
+            let instrument:Instrument = instruments_table[controls[i].getAttribute('data-instrument')];
+            if (instrument && param) {
+                setInstrumentParameter(instrument, param, value);
+                // console.log(instrument.id, param, value);
+            }
         }
         
     }
@@ -195,7 +201,7 @@ function setup(){
     document.body.addEventListener('mouseup', onMouseUp);
 
     presetList = new PresetList(document.getElementById('preset_list'), document.getElementById('save_preset'), 'preset', loadPresetCallback, savePresetCallback);
-    // sequenceList = new PresetList(document.getElementById('preset_list'), 'preset');
+    sequenceList = new PresetList(document.getElementById('sequence_list'), document.getElementById('save_sequence'), 'sequence', loadSequenceCallback, saveSequenceCallback);
     sequencerSetup();
     midiSetup();
 

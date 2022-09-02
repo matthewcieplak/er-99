@@ -1,7 +1,7 @@
 
 class PresetList {
 
-  presets = [];
+  presets = {};
   presetList:HTMLElement = null;
   saveButton:HTMLElement = null;
   user_preset_ids = [];
@@ -22,11 +22,11 @@ class PresetList {
   }
 
   savePreset(){
-    let preset = savePresetCallback.call(this);
+    let preset = this.savePresetCallback.call(this);
 
     // let presetText = document.getElementById('preset_text') as HTMLTextAreaElement;
     // presetText.value =  JSON.stringify(preset);
-    this.createPreset(preset, `Preset ${this.presets.length}`, 'user', true);
+    this.createPreset(preset, `${this.storageKey}-${Object.keys(this.presets).length}`, 'user', true);
   }
  
   loadPreset(preset:any){
@@ -36,7 +36,7 @@ class PresetList {
   loadUserPreset(preset_id) {
     // var preset = user_presets[id];
     // todo get from local storage
-    this.loadPreset(JSON.parse(localStorage.getItem(`preset-${preset_id}`)));
+    this.loadPreset(JSON.parse(localStorage.getItem(`${this.storageKey}-${preset_id}`)));
   }
 
   loadFactoryPreset(preset_id) {
@@ -51,8 +51,8 @@ class PresetList {
             break;
         }
     }
-    localStorage.setItem('user-preset-ids', JSON.stringify(this.user_preset_ids));
-    localStorage.removeItem(`preset-${id}`);
+    localStorage.setItem(`user-${this.storageKey}-ids`, JSON.stringify(this.user_preset_ids));
+    localStorage.removeItem(`${this.storageKey}-${id}`);
   }
 
   clickPreset(event){
@@ -74,7 +74,7 @@ class PresetList {
 
 
 
-  createPresetNameEditor (presetLi:HTMLElement, preset){
+  createPresetNameEditor (presetLi:HTMLElement, localPreset){
     var presetName = document.createElement('INPUT') as HTMLInputElement;
     presetName.type = 'text';
     // presetName.name = `preset_name_${}`;
@@ -85,25 +85,21 @@ class PresetList {
     let presetInput = presetName;
 
 
-    presetName.value = `Preset ${(Object.keys(this.presets).length + this.user_preset_ids.length).toString()}`;
+    presetName.value = `${this.storageKey.charAt(0).toUpperCase()+this.storageKey.slice(1)} ${(Object.keys(this.presets).length + this.user_preset_ids.length).toString()}`;
     presetName.autocomplete = presetName.name;
     presetName.focus();
     presetName.addEventListener('blur', function(event){
         var id = presetName.value;
         presetName.parentElement.setAttribute('data-preset-id', id);
-        // presetLi.innerText = id;
-        // var nameSpan = document.createElement('');
-        // nameSpan.innerText = presetName.name;
-        // presetLi.insertBefore(nameSpan, presetName);
         presetLi.prepend(id);
         presetName.style.display = 'none';
         presetName.remove();
 
 
-        //save to local storag;
+        //save to local storage
         this.user_preset_ids.push(id);
-        localStorage.setItem('user-preset-ids', JSON.stringify(this.user_preset_ids));
-        localStorage.setItem(`preset-${id}`, JSON.stringify(preset));
+        localStorage.setItem(`user-${this.storageKey}-ids`, JSON.stringify(this.user_preset_ids));
+        localStorage.setItem(`${this.storageKey}-${id}`, JSON.stringify(localPreset));
     }.bind(this));
     return presetName;
   }
@@ -134,7 +130,7 @@ class PresetList {
 
    initializePresets(){
     var request = new XMLHttpRequest();
-    request.open("GET", "presets.json", true);
+    request.open("GET", `${this.storageKey}s.json`, true);
     request.responseType = "json";
     // this.presetList = document.getElementById('preset_list');
 
@@ -144,11 +140,11 @@ class PresetList {
             this.createPreset(this.presets[key], key, 'factory');
         }
 
-        this.user_preset_ids = JSON.parse(localStorage.getItem('user-preset-ids') || '[]');
+        this.user_preset_ids = JSON.parse(localStorage.getItem(`user-${this.storageKey}-ids`) || '[]');
         for (let i = 0; i < this.user_preset_ids.length; i++ ) {
             var id = this.user_preset_ids[i];
-            this.presets[id] = JSON.parse(localStorage.getItem('preset-'+id));
-            this.createPreset(this.presets[id], id, 'user', false);
+            //this.presets[id] = {}; //JSON.parse(localStorage.getItem('preset-'+id));
+            this.createPreset({}, id, 'user', false);
         }
 
     }.bind(this);
