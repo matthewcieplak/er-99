@@ -233,6 +233,7 @@ function loadSequenceCallback(preset){
         
         switch(key){
         case 'bars': 
+            sequence_max_length = preset[key] * 16;
             setSequenceLength(preset[key]);
             updateSequenceDisplay();
             break;

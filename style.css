@@ -8,6 +8,7 @@ body {
     padding: 10px;
     box-sizing: border-box;
     background-image: linear-gradient(45deg, rgb(48, 139, 146),rgb(46, 142, 110));
+    background-size: cover;
 }
 
 .clear{ clear: both;  }
@@ -48,6 +49,7 @@ html{
     box-sizing: border-box;
     /* border-bottom: 5px solid rgba(0,0,0, 0.5); */
     min-height: 710px;
+    background-size: cover;
 }
 
 #bg{
@@ -620,12 +622,29 @@ button {
 
 
 .column{
-    width: 29%; 
-    float: left;
-    margin: 0 2%;
+    width: 30%; 
+    float: right;
+    margin: 0 2% 0 1%;
     box-sizing: border-box;
+    margin-bottom: 20px;
 }
 
+.doublecolumn{
+    float: left;
+    width: 45%;
+    margin: 0 2%;
+}
+
+hr{
+    border: 0px none;
+    border-top: 1px solid rgba(255,255,255,0.5);
+    background: transparent;
+    height: 0;
+    margin: 19px 30px;
+    clear: both;
+    border-bottom: 0px none;
+    box-shadow: none;
+}
 /* .column:nth-of-type(n-1){
     padding-right: 10px;
 } */
@@ -665,6 +684,20 @@ button {
 .preset_list li .preset_delete{
     display: none;
 }
+
+.preset_list::-webkit-scrollbar {
+    width: 12px;               /* width of the entire scrollbar */
+  }
+  
+.preset_list::-webkit-scrollbar-track {
+    background: transparent;        /* color of the tracking area */
+}
+  
+.preset_list::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.5);    /* color of the scroll thumb */
+    border-radius: 20px;       /* roundness of the scroll thumb */
+    border: 3px solid transparent;  /* creates padding around scroll thumb */
+  }
 
 
 #save_preset, #save_sequence{
@@ -773,7 +806,16 @@ button {
 
     .column{
         width: 45%; 
-        margin: 0 2%;
+        margin: 0 2% 0 1%;
+    }
+
+
+    .flexcolumn, .doublecolumn{
+        clear: both;
+        width: auto;
+        border-top: 1px solid rgba(255,255,255,0.5);
+        margin-top: 20px;
+        padding-top: 20px;
     }
 
 
@@ -867,10 +909,11 @@ button {
         clear: right;
     }
 
-    .column{
+    .column, .doublecolumn{
         width: 45%; 
-        margin: 0 2%;
+        margin: 0 2% 0 1%;
     }
+    
 
 }
 

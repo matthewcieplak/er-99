@@ -18,6 +18,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Exo:wght@800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
 </head>
 <body>
     <div id="wrapper">
@@ -443,14 +444,7 @@
     </div>
     <div class="postscript">
 
-        <div class="column">
-            <h3 class="left">Sequences</h3>
-            <button id="save_sequence" class="simple_button">Save</button> 
-
-            <textarea id="sequence_text" style="display: none;">JSON HERE</textarea>
-            <ul id="sequence_list" class="preset_list clear"></ul>
-        </div>
-
+        
         <div class="column">
             <h3 class="left">Sound Presets</h3>
             <button id="save_preset" class="simple_button">Save</button> 
@@ -460,19 +454,43 @@
         </div>
 
         <div class="column">
-            <h3>What Is This?</h3>
-            <p><strong>ER-99</strong> is a web-based drum machine. All of the drums are synthesized using the WebAudio API. The hi-hats, crash, and ride cymbals are produced from sampled audio.
-            <p>The complete source code is <a href="https://github.com/matthewcieplak/er-99">available on Github</a>.</p>
-            <p>ER</p>
+            <h3 class="left">Sequences</h3>
+            <button id="save_sequence" class="simple_button">Save</button> 
+
+            <textarea id="sequence_text" style="display: none;">JSON HERE</textarea>
+            <ul id="sequence_list" class="preset_list clear"></ul>
         </div>
 
-        <div class="column">
-            <h3>Who Made This?</h3>
-            <p>This page was built by <a href="https://youtube.com/c/extralifedisco">Extralife</a> (builder of the <a href="https://store.extralifeinstruments.com">Super Sixteen Eurorack Sequencer</a>) to celebrate 9/09 day 2022
+        <div class="column flexcolumn">
+            <h3>What Is ER-99?</h3>
+            <p><strong>ER-99</strong> is a web-based instrument <code>🎛️</code> based on a famous Japanese drum machine from the 1980s. It was built to celebrate 9/09 day 2022 🎉!
+            <p>All of the drums are synthesized using the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API" target="_blank">WebAudio API</a>. The hi-hats, crash, and ride cymbals are produced from sampled audio.
+            <p>The complete source code is <a href="https://github.com/matthewcieplak/er-99" target="_blank">available on Github</a>.</p>
+        </div>
 
+        <hr class="hidden-xs hidden-sm hidden-md"/>
+
+
+        <div class="clear column doublecolumn">
+            <h3>How do I play?</h3>
+            <p>You can play the drums by pressing the number buttons on your keyboard. Turn the knobs to change the sound of each instrument. </p>
+            
+            <p>The 16 buttons at the bottom show the sequence for each instrument. Click once to activate a step, and click again to add an accent (indicated by a brighter light). The emphasis of the accented notes is controlled by the "Accent" knob.</p>
+
+            <p>You can store Sequences and Sound Presets using the menus above. These are stored in your browser's memory and will be recalled the next time you visit (on this computer).</p>
+        </div>
+
+        <div class="column doublecolumn">
+            <h3>Who made this?</h3>
+            <p>Hello! My name is <a href="https://matthewcieplak.com" target="_blank">Matthew Cieplak</a>, and I'm known online as <a href="https://youtube.com/c/extralifedisco" target="_blank">Extralife</a>. 
+            I make <a href="https://soundcloud.com/extralifedisco">music</a>, <a href="https://youtube.com/c/extralifedisco">youtube videos</a>, and <a href="https://store.extralifeinstruments.com">synthesizer modules</a>.
+            You can follow me on <a href="https://instagram.com/extralifedisco" target="_blank">Instagram</a>, <a href="https://twitter.com/extralifedisco" target="_blank">Twitter</a>, and <a href="https://github.com/matthewcieplak">Github</a>.
+
+            <p>If you like this project, you can support me on <a href="https://patreon.com/extralife">Patreon</a> to help me keep building new instruments. Thanks!</p>
         </div>
         <p style="text-align: center; clear: both; padding: 100px 0 50px;">&copy; Extralife Instruments 2022</p>
-
+        
     </div>
+<div class="clear">&nbsp;</div>
 </body>
 </html>

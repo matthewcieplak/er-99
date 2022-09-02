@@ -1112,6 +1112,7 @@ function loadSequenceCallback(preset) {
         sequencer[key] = preset[key];
         switch (key) {
             case 'bars':
+                sequence_max_length = preset[key] * 16;
                 setSequenceLength(preset[key]);
                 updateSequenceDisplay();
                 break;
@@ -1183,14 +1184,16 @@ function notePressed(event) {
 function keyPressed(event) {
     if (!running)
         setupAudio();
-    if (document.activeElement)
-        if (keymap[event.which]) {
-            notePlayed(keymap[event.which]);
-        }
-        else if (event.which == 32) {
-            toggleSequence();
-            event.stopPropagation();
-        }
+    if (document.activeElement.nodeName == 'INPUT') {
+        return true;
+    }
+    if (keymap[event.which]) {
+        notePlayed(keymap[event.which]);
+    }
+    else if (event.which == 32) {
+        toggleSequence();
+        event.stopPropagation();
+    }
     return false;
 }
 function clickKnob(event) {

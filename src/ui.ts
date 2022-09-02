@@ -47,7 +47,9 @@ function notePressed(event){
 function keyPressed(event){
     if (!running) setupAudio();
 
-    if (document.activeElement)
+    if (document.activeElement.nodeName == 'INPUT') {
+        return true;
+    }
 
     if (keymap[event.which]) {
         notePlayed(keymap[event.which]);
