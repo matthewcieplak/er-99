@@ -1,92 +1,91 @@
 
+class PresetList {
 
-function savePreset(){
-    let preset = {};
-    let knobs = document.getElementsByClassName('knob');
-    for (let i = 0; i < knobs.length; i++){
-        if (knobs[i].getAttribute('name') != null) {
-            preset[knobs[i].getAttribute('name')] = parseFloat(knobs[i].getAttribute('value')).toFixed(2);
-        }
-    }
-    let presetText = document.getElementById('preset_text') as HTMLTextAreaElement;
-    presetText.value =  JSON.stringify(preset);
-    createPreset(preset, `Preset ${presets.length}`, 'user', true);
+  presets = [];
+  presetList:HTMLElement = null;
+  saveButton:HTMLElement = null;
+  user_preset_ids = [];
+  storageKey = '';
+  loadPresetCallback:Function = null;
+  savePresetCallback:Function = null;
 
-}
- 
-function loadPreset(preset:any){
+  constructor(presetList:HTMLElement, saveButton:HTMLElement, storageKey:string, loadPresetCallback:Function, savePresetCallback:Function) {
+    this.presetList = presetList;
+    this.saveButton = saveButton;
+    this.storageKey = storageKey;
+    this.loadPresetCallback = loadPresetCallback;
+    this.savePresetCallback = savePresetCallback;
+
+    this.savePreset = this.savePreset.bind(this);
+    this.createPresetNameEditor = this.createPresetNameEditor.bind(this);
+    this.initializePresets();
+  }
+
+  savePreset(){
+    let preset = savePresetCallback.call(this);
+
     // let presetText = document.getElementById('preset_text') as HTMLTextAreaElement;
-    // let preset = JSON.parse(presetText.value);
+    // presetText.value =  JSON.stringify(preset);
+    this.createPreset(preset, `Preset ${this.presets.length}`, 'user', true);
+  }
+ 
+  loadPreset(preset:any){
+    this.loadPresetCallback.call(this, preset);
+  }
 
-    let knobs = document.getElementsByClassName('knob');
-    for (let i = 0; i < knobs.length; i++){
-        for (let ii in preset) {
-            if (knobs[i].getAttribute('name') == ii) {
-                knobs[i].setAttribute('value', preset[ii]);
-                break;
-            }
-        }
-    }
-    
-    initializeKnobPositions();
-}
-
-function loadUserPreset(preset_id) {
+  loadUserPreset(preset_id) {
     // var preset = user_presets[id];
     // todo get from local storage
-    loadPreset(JSON.parse(localStorage.getItem(`preset-${preset_id}`)));
-};
+    this.loadPreset(JSON.parse(localStorage.getItem(`preset-${preset_id}`)));
+  }
 
-function loadFactoryPreset(preset_id) {
+  loadFactoryPreset(preset_id) {
     // var preset = presets[i];
-    loadPreset(presets[preset_id]);
-};
+    this.loadPreset(this.presets[preset_id]);
+  }
 
-function deletePreset(id){
-    for (let i = 0; i < user_preset_ids.length; i++) {
-        if (user_preset_ids[i] == id) {
-            user_preset_ids.splice(i, 1);
+  deletePreset(id){
+    for (let i = 0; i < this.user_preset_ids.length; i++) {
+        if (this.user_preset_ids[i] == id) {
+            this.user_preset_ids.splice(i, 1);
             break;
         }
     }
-    localStorage.setItem('user-preset-ids', JSON.stringify(user_preset_ids));
+    localStorage.setItem('user-preset-ids', JSON.stringify(this.user_preset_ids));
     localStorage.removeItem(`preset-${id}`);
-}
+  }
 
-function clickPreset(event){
+  clickPreset(event){
     let preset_id = event.target.getAttribute('data-preset-id');
     if (event.target.className == 'preset_delete') {
         preset_id = event.target.parentNode.getAttribute('data-preset-id');
 
-        deletePreset(preset_id);
+        this.deletePreset(preset_id);
         event.target.parentNode.remove();
     } else {
         
         if (event.target.getAttribute('data-preset-type') == "user") {
-            loadUserPreset(preset_id);            
+            this.loadUserPreset(preset_id);            
         } else {
-            loadFactoryPreset(preset_id);
+            this.loadFactoryPreset(preset_id);
         }
     }
-}
+  }
 
-var presets = [];
-var presetList:HTMLElement;
-var presetInput;
-var user_preset_ids = [];
 
-function createPresetNameEditor(presetLi:HTMLElement, preset){
+
+  createPresetNameEditor (presetLi:HTMLElement, preset){
     var presetName = document.createElement('INPUT') as HTMLInputElement;
     presetName.type = 'text';
     // presetName.name = `preset_name_${}`;
     presetName.autofocus = true;
     presetLi.appendChild(presetName);
-    presetList.insertBefore(presetLi, presetList.firstChild);
+    this.presetList.insertBefore(presetLi, this.presetList.firstChild);
  
-    presetInput = presetName;
+    let presetInput = presetName;
 
 
-    presetName.value = `Preset ${(Object.keys(presets).length + user_preset_ids.length).toString()}`;
+    presetName.value = `Preset ${(Object.keys(this.presets).length + this.user_preset_ids.length).toString()}`;
     presetName.autocomplete = presetName.name;
     presetName.focus();
     presetName.addEventListener('blur', function(event){
@@ -102,14 +101,14 @@ function createPresetNameEditor(presetLi:HTMLElement, preset){
 
 
         //save to local storag;
-        user_preset_ids.push(id);
-        localStorage.setItem('user-preset-ids', JSON.stringify(user_preset_ids));
+        this.user_preset_ids.push(id);
+        localStorage.setItem('user-preset-ids', JSON.stringify(this.user_preset_ids));
         localStorage.setItem(`preset-${id}`, JSON.stringify(preset));
-    });
+    }.bind(this));
     return presetName;
-}
+  }
 
-function createPreset(preset, id:string, typename:string, is_new:boolean = false){
+  createPreset(preset, id:string, typename:string, is_new:boolean = false){
     var presetLi = document.createElement("LI");
     presetLi.setAttribute('data-preset-type', typename);
     presetLi.setAttribute('data-preset-id', id.toString());
@@ -117,13 +116,13 @@ function createPreset(preset, id:string, typename:string, is_new:boolean = false
 
     if (typename == 'factory') {
         presetLi.innerHTML = id;
-        presetList.insertBefore(presetLi, presetList.firstChild);
+        this.presetList.insertBefore(presetLi, this.presetList.firstChild);
     } else {
         if (is_new) {
-            presetName = createPresetNameEditor(presetLi, preset);
+            presetName = this.createPresetNameEditor(presetLi, preset);
         } else {
             presetLi.innerHTML = id;
-            presetList.insertBefore(presetLi, presetList.firstChild);
+            this.presetList.insertBefore(presetLi, this.presetList.firstChild);
         }
 
         var deleteBtn = document.createElement('SPAN');
@@ -131,33 +130,34 @@ function createPreset(preset, id:string, typename:string, is_new:boolean = false
         deleteBtn.className = 'preset_delete';
         presetLi.appendChild(deleteBtn);
     }
-}
+  }
 
-function initializePresets(){
+   initializePresets(){
     var request = new XMLHttpRequest();
     request.open("GET", "presets.json", true);
     request.responseType = "json";
-    presetList = document.getElementById('preset_list');
+    // this.presetList = document.getElementById('preset_list');
 
     request.onload = function() {
-        presets = request.response;
+        this.presets = request.response;
         for (let key in request.response) {
-            createPreset(presets[key], key, 'factory');
+            this.createPreset(this.presets[key], key, 'factory');
         }
 
-        user_preset_ids = JSON.parse(localStorage.getItem('user-preset-ids') || '[]');
-        for (let i = 0; i < user_preset_ids.length; i++ ) {
-            var id = user_preset_ids[i];
-            presets[id] = JSON.parse(localStorage.getItem('preset-'+id));
-            createPreset(presets[id], id, 'user', false);
+        this.user_preset_ids = JSON.parse(localStorage.getItem('user-preset-ids') || '[]');
+        for (let i = 0; i < this.user_preset_ids.length; i++ ) {
+            var id = this.user_preset_ids[i];
+            this.presets[id] = JSON.parse(localStorage.getItem('preset-'+id));
+            this.createPreset(this.presets[id], id, 'user', false);
         }
 
-    }
+    }.bind(this);
     
 
     request.send();
 
-    presetList.addEventListener('click', clickPreset);
+    this.presetList.addEventListener('click', this.clickPreset.bind(this));
 
-    document.getElementById('save_preset').addEventListener('click', savePreset);
-}
+    this.saveButton.addEventListener('click', this.savePreset.bind(this));
+  }
+};

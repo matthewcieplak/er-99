@@ -149,12 +149,35 @@ function initializeKnobPositions(){
     }
 }
 
+function loadPresetCallback(preset){
+    let knobs = document.getElementsByClassName('knob');
+    for (let i = 0; i < knobs.length; i++){
+        for (let ii in preset) {
+            if (knobs[i].getAttribute('name') == ii) {
+                knobs[i].setAttribute('value', preset[ii]);
+                break;
+            }
+        }
+    }
+    
+    initializeKnobPositions();
+}
+
+function savePresetCallback(){
+    let preset = {};
+    let knobs = document.getElementsByClassName('knob');
+    for (let i = 0; i < knobs.length; i++){
+        if (knobs[i].getAttribute('name') != null) {
+            preset[knobs[i].getAttribute('name')] = parseFloat(knobs[i].getAttribute('value')).toFixed(2);
+        }
+    }
+    return preset;
+}
+
 function setup(){
     document.addEventListener("mousedown", setupAudio);
     document.addEventListener("keydown", setupAudio);
-
     document.addEventListener("keydown", keyPressed);
-    // document.addEventListener("keyup", keyUp, false);
 
     var controls = document.querySelectorAll("button.knob");
     for (let i = 0; i < controls.length; i++) {
@@ -171,8 +194,8 @@ function setup(){
     document.body.addEventListener('mousemove', onMouseMove);
     document.body.addEventListener('mouseup', onMouseUp);
 
-    initializePresets();
-
+    presetList = new PresetList(document.getElementById('preset_list'), document.getElementById('save_preset'), 'preset', loadPresetCallback, savePresetCallback);
+    // sequenceList = new PresetList(document.getElementById('preset_list'), 'preset');
     sequencerSetup();
     midiSetup();
 
@@ -180,3 +203,6 @@ function setup(){
     active_instrument_id = 'bd';
     selectInstrument();
 }
+
+var presetList;
+var sequenceList;
