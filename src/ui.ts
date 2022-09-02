@@ -47,6 +47,8 @@ function notePressed(event){
 function keyPressed(event){
     if (!running) setupAudio();
 
+    if (document.activeElement)
+
     if (keymap[event.which]) {
         notePlayed(keymap[event.which]);
 
@@ -141,7 +143,7 @@ function initializeKnobPositions(){
         var param:string = controls[i].getAttribute('data-param');
         if (instrument && param) {
             setInstrumentParameter(instrument, param, value);
-            console.log(instrument.id, param, value);
+            // console.log(instrument.id, param, value);
         }
         
     }
@@ -169,16 +171,10 @@ function setup(){
     document.body.addEventListener('mousemove', onMouseMove);
     document.body.addEventListener('mouseup', onMouseUp);
 
-    document.getElementById('save_preset').addEventListener('click', savePreset);
-    // document.getElementById('load_preset').addEventListener('click', loadPreset);
-
-    // volumeControl = document.querySelector("input[name='volume']");
-    // volumeControl.addEventListener("change", changeVolume, false);
     initializePresets();
 
     sequencerSetup();
     midiSetup();
-    // initializeKnobPositions();
 
 
     active_instrument_id = 'bd';

@@ -737,7 +737,7 @@ function savePreset() {
     }
     let presetText = document.getElementById('preset_text');
     presetText.value = JSON.stringify(preset);
-    createPreset(preset, 0, 'user');
+    createPreset(preset, `Preset ${presets.length}`, 'user', true);
 }
 function loadPreset(preset) {
     // let presetText = document.getElementById('preset_text') as HTMLTextAreaElement;
@@ -756,6 +756,7 @@ function loadPreset(preset) {
 function loadUserPreset(preset_id) {
     // var preset = user_presets[id];
     // todo get from local storage
+    loadPreset(JSON.parse(localStorage.getItem(`preset-${preset_id}`)));
 }
 ;
 function loadFactoryPreset(preset_id) {
@@ -763,12 +764,24 @@ function loadFactoryPreset(preset_id) {
     loadPreset(presets[preset_id]);
 }
 ;
+function deletePreset(id) {
+    for (let i = 0; i < user_preset_ids.length; i++) {
+        if (user_preset_ids[i] == id) {
+            user_preset_ids.splice(i, 1);
+            break;
+        }
+    }
+    localStorage.setItem('user-preset-ids', JSON.stringify(user_preset_ids));
+    localStorage.removeItem(`preset-${id}`);
+}
 function clickPreset(event) {
-    if (event.currentTarget.className == 'preset_delete') {
-        // deletePreset(event.currentTarget)
+    let preset_id = event.target.getAttribute('data-preset-id');
+    if (event.target.className == 'preset_delete') {
+        preset_id = event.target.parentNode.getAttribute('data-preset-id');
+        deletePreset(preset_id);
+        event.target.parentNode.remove();
     }
     else {
-        let preset_id = parseInt(event.target.getAttribute('data-preset-id'));
         if (event.target.getAttribute('data-preset-type') == "user") {
             loadUserPreset(preset_id);
         }
@@ -779,12 +792,58 @@ function clickPreset(event) {
 }
 var presets = [];
 var presetList;
-function createPreset(preset, id, typename) {
+var presetInput;
+var user_preset_ids = [];
+function createPresetNameEditor(presetLi, preset) {
+    var presetName = document.createElement('INPUT');
+    presetName.type = 'text';
+    // presetName.name = `preset_name_${}`;
+    presetName.autofocus = true;
+    presetLi.appendChild(presetName);
+    presetList.insertBefore(presetLi, presetList.firstChild);
+    presetInput = presetName;
+    presetName.value = `Preset ${(Object.keys(presets).length + user_preset_ids.length).toString()}`;
+    presetName.autocomplete = presetName.name;
+    presetName.focus();
+    presetName.addEventListener('blur', function (event) {
+        var id = presetName.value;
+        presetName.parentElement.setAttribute('data-preset-id', id);
+        // presetLi.innerText = id;
+        // var nameSpan = document.createElement('');
+        // nameSpan.innerText = presetName.name;
+        // presetLi.insertBefore(nameSpan, presetName);
+        presetLi.prepend(id);
+        presetName.style.display = 'none';
+        presetName.remove();
+        //save to local storag;
+        user_preset_ids.push(id);
+        localStorage.setItem('user-preset-ids', JSON.stringify(user_preset_ids));
+        localStorage.setItem(`preset-${id}`, JSON.stringify(preset));
+    });
+    return presetName;
+}
+function createPreset(preset, id, typename, is_new = false) {
     var presetLi = document.createElement("LI");
     presetLi.setAttribute('data-preset-type', typename);
     presetLi.setAttribute('data-preset-id', id.toString());
-    presetLi.innerHTML = preset.name + ' <span class="preset_delete">Delete</span>';
-    presetList.appendChild(presetLi);
+    var presetName;
+    if (typename == 'factory') {
+        presetLi.innerHTML = id;
+        presetList.insertBefore(presetLi, presetList.firstChild);
+    }
+    else {
+        if (is_new) {
+            presetName = createPresetNameEditor(presetLi, preset);
+        }
+        else {
+            presetLi.innerHTML = id;
+            presetList.insertBefore(presetLi, presetList.firstChild);
+        }
+        var deleteBtn = document.createElement('SPAN');
+        deleteBtn.innerText = 'Delete';
+        deleteBtn.className = 'preset_delete';
+        presetLi.appendChild(deleteBtn);
+    }
 }
 function initializePresets() {
     var request = new XMLHttpRequest();
@@ -793,12 +852,19 @@ function initializePresets() {
     presetList = document.getElementById('preset_list');
     request.onload = function () {
         presets = request.response;
-        for (var i = 0; i < presets.length; i++) {
-            createPreset(presets[i], i, 'factory');
+        for (let key in request.response) {
+            createPreset(presets[key], key, 'factory');
+        }
+        user_preset_ids = JSON.parse(localStorage.getItem('user-preset-ids') || '[]');
+        for (let i = 0; i < user_preset_ids.length; i++) {
+            var id = user_preset_ids[i];
+            presets[id] = JSON.parse(localStorage.getItem('preset-' + id));
+            createPreset(presets[id], id, 'user', false);
         }
     };
     request.send();
     presetList.addEventListener('click', clickPreset);
+    document.getElementById('save_preset').addEventListener('click', savePreset);
 }
 function playSampler(sampler, accent, closedState) {
     // Get an AudioBufferSourceNode.
@@ -1105,13 +1171,14 @@ function notePressed(event) {
 function keyPressed(event) {
     if (!running)
         setupAudio();
-    if (keymap[event.which]) {
-        notePlayed(keymap[event.which]);
-    }
-    else if (event.which == 32) {
-        toggleSequence();
-        event.stopPropagation();
-    }
+    if (document.activeElement)
+        if (keymap[event.which]) {
+            notePlayed(keymap[event.which]);
+        }
+        else if (event.which == 32) {
+            toggleSequence();
+            event.stopPropagation();
+        }
     return false;
 }
 function clickKnob(event) {
@@ -1198,7 +1265,7 @@ function initializeKnobPositions() {
         var param = controls[i].getAttribute('data-param');
         if (instrument && param) {
             setInstrumentParameter(instrument, param, value);
-            console.log(instrument.id, param, value);
+            // console.log(instrument.id, param, value);
         }
     }
 }
@@ -1218,14 +1285,9 @@ function setup() {
     screenDiv = document.querySelector('#screen');
     document.body.addEventListener('mousemove', onMouseMove);
     document.body.addEventListener('mouseup', onMouseUp);
-    document.getElementById('save_preset').addEventListener('click', savePreset);
-    // document.getElementById('load_preset').addEventListener('click', loadPreset);
-    // volumeControl = document.querySelector("input[name='volume']");
-    // volumeControl.addEventListener("change", changeVolume, false);
     initializePresets();
     sequencerSetup();
     midiSetup();
-    // initializeKnobPositions();
     active_instrument_id = 'bd';
     selectInstrument();
 }

@@ -105,6 +105,14 @@ select{
     font-size: 10px;
 }
 
+input[type="text"]{
+    color : #fff;
+    border: 0px none;
+    background: rgba(255,255,255,0.3);
+    font-family: 'Space Mono';
+    font-size: 14px;
+}
+
 .archive{
     font-family: 'Exo', "Archive";
     font-weight: 900;
@@ -640,6 +648,11 @@ button {
     background: #c6c2b8;
     box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
     top: 1px;
+}
+
+#preset_list{
+    max-height: 250px;
+    overflow-y: auto;
 }
 
 #preset_list li{
