@@ -1,7 +1,7 @@
 # ER-99
 A web-based drum synthesizer
 
-![ER-99 Screenshot](https://github.com/matthewcieplak/er-99/raw/master/img/er-99.jpg)
+![ER-99 Screenshot](https://github.com/matthewcieplak/er-99/raw/main/img/er-99.jpg)
 
 ## What Is ER-99?
 ER-99 is a web-based instrument drum machine based on a famous Japanese instrument from the 1980s, and was released on 9/09/2022.
