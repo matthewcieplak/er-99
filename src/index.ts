@@ -67,8 +67,9 @@ function makeDistortionCurve(amount=20) {
 
 
 
-function setupAudio(){
+function setupAudio(event=null){
     if (running) return;
+
     running = true;
     audioContext = new (window.AudioContext) ; // || window.webkitAudioContext)();
 

@@ -4,6 +4,8 @@ let clickedTarget:HTMLButtonElement;
 let clickedInstrument:Instrument;
 let clickedParam:string;
 let clickedMaster:boolean = false;
+let touchX:number = 0;
+let touchY:number = 0;
 
 var keymap = {
     49 : 'bd',  //   1
@@ -56,14 +58,19 @@ function keyPressed(event){
 
     } else if (event.which == 32) {
         toggleSequence();
+        event.preventDefault();
         event.stopPropagation();
     }
     return false;
 }
 
-
 function clickKnob(event) {
-    if (!running) setupAudio();
+    if (event.type == 'mousedown' || event.type == 'touchstart') {
+        if (!running) setupAudio();
+        clicking = true;
+    }
+    
+    // console.log(event.currentTarget);
 
     clickedInstrument = instruments_table[event.currentTarget.getAttribute('data-instrument')];
     clickedMaster = event.target.getAttribute('data-control') == 'master';
@@ -71,7 +78,11 @@ function clickKnob(event) {
         clickedParam = event.currentTarget.getAttribute('data-param');
     } 
     clickedTarget = event.currentTarget;
-    clicking = true;
+   
+    if (event.touches) {
+        touchX = event.touches[0].pageX;
+        touchY = event.touches[0].pageY;
+    }
 }
 
 function onMouseUp(event) {
@@ -80,8 +91,18 @@ function onMouseUp(event) {
 }
 
 function onMouseMove(event) {
-    if (clicking && clickedTarget) {
-        var increment_value:number  = event.movementY - event.movementX;
+    if (clickedTarget && (clicking || event.type == 'wheel')) {
+        var increment_value:number = event.movementY - event.movementX;
+        if (event.touches) {
+            //debugger;
+            increment_value = touchX - event.touches[0].pageX + event.touches[0].pageY - touchY;
+            touchX = event.touches[0].pageX;
+            touchY = event.touches[0].pageY;
+        
+        } else if (event.deltaY) {
+            // debugger;
+            increment_value = event.deltaY > 0 ? 5 : -5;
+        }
         var newValue = moveControl(increment_value, clickedTarget)
         
         if (clickedInstrument) {
@@ -95,11 +116,14 @@ function onMouseMove(event) {
                 case 'globalAccent'  : globalParams.globalAccent = newValue; break;
                 case 'compression' : compressor.threshold.value = newValue * -1; makeup.gain.value = 1.0 + (newValue / 40); break; // console.log(makeup.gain.value); break;
             }
-        } 
+        }
     
-        return newValue;
+        event.preventDefault();
+        event.stopPropagation();
+        return false; //newValue;
     }
 }
+
 
 function moveControl(increment_value:number, target:any) {
     var min = parseFloat(target.getAttribute('data-range-min') || '0') || 0.0;
@@ -184,23 +208,31 @@ function savePresetCallback(){
 
 function setup(){
     document.addEventListener("mousedown", setupAudio);
+    document.addEventListener("touchstart", setupAudio);
     document.addEventListener("keydown", setupAudio);
     document.addEventListener("keydown", keyPressed);
 
     var controls = document.querySelectorAll("button.knob");
     for (let i = 0; i < controls.length; i++) {
         controls[i].addEventListener("mousedown", clickKnob);
+        controls[i].addEventListener("touchstart", clickKnob);
+        controls[i].addEventListener("mouseenter", clickKnob);
+        controls[i].addEventListener("wheel", onMouseMove);
     }
 
     var instruments = document.querySelectorAll(".instrument_name");
     for (let i = 0; i < instruments.length; i++) {
         instruments[i].addEventListener("mousedown", notePressed);
+        instruments[i].addEventListener("touchstart", notePressed);
     }
 
     screenDiv = document.querySelector('#screen');
 
     document.body.addEventListener('mousemove', onMouseMove);
     document.body.addEventListener('mouseup', onMouseUp);
+    document.body.addEventListener('touchmove', onMouseMove, { passive: false });
+    document.body.addEventListener('touchend', onMouseUp);
+    // document.addEventListener("scroll", onScroll);
 
     presetList = new PresetList(document.getElementById('preset_list'), document.getElementById('save_preset'), 'preset', loadPresetCallback, savePresetCallback);
     sequenceList = new PresetList(document.getElementById('sequence_list'), document.getElementById('save_sequence'), 'sequence', loadSequenceCallback, saveSequenceCallback);

@@ -379,7 +379,7 @@ function makeDistortionCurve(amount = 20) {
     }
     return curve;
 }
-function setupAudio() {
+function setupAudio(event = null) {
     if (running)
         return;
     running = true;
@@ -1146,6 +1146,8 @@ let clickedTarget;
 let clickedInstrument;
 let clickedParam;
 let clickedMaster = false;
+let touchX = 0;
+let touchY = 0;
 var keymap = {
     49: 'bd',
     50: 'sd',
@@ -1192,28 +1194,46 @@ function keyPressed(event) {
     }
     else if (event.which == 32) {
         toggleSequence();
+        event.preventDefault();
         event.stopPropagation();
     }
     return false;
 }
 function clickKnob(event) {
-    if (!running)
-        setupAudio();
+    if (event.type == 'mousedown' || event.type == 'touchstart') {
+        if (!running)
+            setupAudio();
+        clicking = true;
+    }
+    // console.log(event.currentTarget);
     clickedInstrument = instruments_table[event.currentTarget.getAttribute('data-instrument')];
     clickedMaster = event.target.getAttribute('data-control') == 'master';
     if (clickedInstrument || clickedMaster) {
         clickedParam = event.currentTarget.getAttribute('data-param');
     }
     clickedTarget = event.currentTarget;
-    clicking = true;
+    if (event.touches) {
+        touchX = event.touches[0].pageX;
+        touchY = event.touches[0].pageY;
+    }
 }
 function onMouseUp(event) {
     clicking = false;
     clickedTarget = null;
 }
 function onMouseMove(event) {
-    if (clicking && clickedTarget) {
+    if (clickedTarget && (clicking || event.type == 'wheel')) {
         var increment_value = event.movementY - event.movementX;
+        if (event.touches) {
+            //debugger;
+            increment_value = touchX - event.touches[0].pageX + event.touches[0].pageY - touchY;
+            touchX = event.touches[0].pageX;
+            touchY = event.touches[0].pageY;
+        }
+        else if (event.deltaY) {
+            // debugger;
+            increment_value = event.deltaY > 0 ? 5 : -5;
+        }
         var newValue = moveControl(increment_value, clickedTarget);
         if (clickedInstrument) {
             setInstrumentParameter(clickedInstrument, clickedParam, newValue);
@@ -1240,7 +1260,9 @@ function onMouseMove(event) {
                     break; // console.log(makeup.gain.value); break;
             }
         }
-        return newValue;
+        event.preventDefault();
+        event.stopPropagation();
+        return false; //newValue;
     }
 }
 function moveControl(increment_value, target) {
@@ -1314,19 +1336,27 @@ function savePresetCallback() {
 }
 function setup() {
     document.addEventListener("mousedown", setupAudio);
+    document.addEventListener("touchstart", setupAudio);
     document.addEventListener("keydown", setupAudio);
     document.addEventListener("keydown", keyPressed);
     var controls = document.querySelectorAll("button.knob");
     for (let i = 0; i < controls.length; i++) {
         controls[i].addEventListener("mousedown", clickKnob);
+        controls[i].addEventListener("touchstart", clickKnob);
+        controls[i].addEventListener("mouseenter", clickKnob);
+        controls[i].addEventListener("wheel", onMouseMove);
     }
     var instruments = document.querySelectorAll(".instrument_name");
     for (let i = 0; i < instruments.length; i++) {
         instruments[i].addEventListener("mousedown", notePressed);
+        instruments[i].addEventListener("touchstart", notePressed);
     }
     screenDiv = document.querySelector('#screen');
     document.body.addEventListener('mousemove', onMouseMove);
     document.body.addEventListener('mouseup', onMouseUp);
+    document.body.addEventListener('touchmove', onMouseMove, { passive: false });
+    document.body.addEventListener('touchend', onMouseUp);
+    // document.addEventListener("scroll", onScroll);
     presetList = new PresetList(document.getElementById('preset_list'), document.getElementById('save_preset'), 'preset', loadPresetCallback, savePresetCallback);
     sequenceList = new PresetList(document.getElementById('sequence_list'), document.getElementById('save_sequence'), 'sequence', loadSequenceCallback, saveSequenceCallback);
     sequencerSetup();
