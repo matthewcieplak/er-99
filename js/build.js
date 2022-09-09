@@ -568,7 +568,7 @@ let RimShot = {
     filterTopology: 'parallel',
     highPassFreq: 100,
     filterNodes: [],
-    volume: 2.0,
+    volume: 3.0,
     saturation: 3.0
 };
 let HandClap = {
