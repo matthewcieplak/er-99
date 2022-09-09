@@ -1,7 +1,7 @@
 function playGenerator(generator, accent) {
     // generator.noiseInput.gain.cancelAndHoldAtTime(audioContext.currentTime);
     if (generator.delayConst) { //clap
-        generator.noiseInput.gain.cancelAndHoldAtTime(audioContext.currentTime);
+        // generator.noiseInput.gain.cancelAndHoldAtTime(audioContext.currentTime);
         generator.noiseInput.gain.setValueAtTime(0.5, audioContext.currentTime);
         generator.noiseInput.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + (generator.tone_decay / 1000.0));
         generator.delayInput.gain.cancelScheduledValues(1.0);
@@ -427,24 +427,28 @@ function setupAudio(event = null) {
 ;
 window.onload = setup;
 function playInstrument(instrument, accent) {
-    instrument.osc.frequency.cancelAndHoldAtTime(audioContext.currentTime);
+    // instrument.osc.frequency.cancelAndHoldAtTime(audioContext.currentTime);
+    instrument.osc.frequency.cancelScheduledValues(1.0);
     instrument.osc.frequency.setValueAtTime(instrument.frequency * instrument.env_amount, audioContext.currentTime);
     instrument.osc.frequency.exponentialRampToValueAtTime(instrument.frequency, audioContext.currentTime + instrument.env_duration / 1000.0);
     if (instrument.osc2) {
-        instrument.osc2.frequency.cancelAndHoldAtTime(audioContext.currentTime);
+        // instrument.osc2.frequency.cancelAndHoldAtTime(audioContext.currentTime);
+        instrument.osc.frequency.cancelScheduledValues(1.0);
         instrument.osc2.frequency.setValueAtTime((instrument.frequency + instrument.offset) * instrument.env_amount, audioContext.currentTime);
         instrument.osc2.frequency.exponentialRampToValueAtTime(instrument.frequency, audioContext.currentTime + instrument.env_duration / 1000.0);
     }
-    instrument.noiseInput.gain.cancelAndHoldAtTime(audioContext.currentTime);
+    // instrument.noiseInput.gain.cancelAndHoldAtTime(audioContext.currentTime);
+    instrument.noiseInput.gain.cancelScheduledValues(1.0);
     instrument.noiseInput.gain.setValueAtTime(instrument.tone, audioContext.currentTime);
-    instrument.noiseInput.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + instrument.tone_decay / 1000.0);
+    instrument.noiseInput.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + instrument.tone_decay / 1000.0);
     instrument.output.gain.setValueAtTime(instrument.volume * (accent ? globalParams.globalAccent : 1.0), audioContext.currentTime);
     if (instrument.saturation) {
         instrument.saturationNode.gain.setValueAtTime(instrument.saturation, audioContext.currentTime);
     }
-    instrument.input.gain.cancelAndHoldAtTime(audioContext.currentTime);
+    instrument.input.gain.cancelScheduledValues(1.0);
+    // instrument.input.gain.cancelAndHoldAtTime(audioContext.currentTime);
     instrument.input.gain.linearRampToValueAtTime(instrument.volume, audioContext.currentTime + 0.005);
-    instrument.input.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + instrument.decay / 1000.0);
+    instrument.input.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + instrument.decay / 1000.0);
     // setTimeout(() => instrument.output.gain.value = 0, instrument.decay);
 }
 function setupInstrument(instrument) {
@@ -868,7 +872,8 @@ function playSampler(sampler, accent, closedState) {
     // This is the AudioNode to use when we want to play an AudioBuffer
     if (sampler.sourceNode)
         sampler.sourceNode.stop();
-    sampler.output.gain.cancelAndHoldAtTime(audioContext.currentTime);
+    // sampler.output.gain.cancelAndHoldAtTime(audioContext.currentTime);
+    sampler.output.gain.cancelScheduledValues(1.0);
     sampler.output.gain.setValueAtTime(sampler.volume * (accent ? globalParams.globalAccent : 1.0), audioContext.currentTime);
     sampler.output.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + (closedState ? sampler.decay_closed : sampler.decay) / 1000.0);
     sampler.sourceNode = audioContext.createBufferSource();

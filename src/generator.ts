@@ -2,7 +2,8 @@ function playGenerator(generator:any, accent:Boolean) {
     // generator.noiseInput.gain.cancelAndHoldAtTime(audioContext.currentTime);
     if (generator.delayConst) { //clap
 
-        generator.noiseInput.gain.cancelAndHoldAtTime(audioContext.currentTime);
+        // generator.noiseInput.gain.cancelAndHoldAtTime(audioContext.currentTime);
+        
         generator.noiseInput.gain.setValueAtTime(0.5, audioContext.currentTime);
         generator.noiseInput.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + (generator.tone_decay / 1000.0));
 

@@ -4,7 +4,8 @@ function playSampler(sampler:Sampler, accent:Boolean, closedState:Boolean) {
     // This is the AudioNode to use when we want to play an AudioBuffer
     if (sampler.sourceNode) sampler.sourceNode.stop();
 
-    sampler.output.gain.cancelAndHoldAtTime(audioContext.currentTime);
+    // sampler.output.gain.cancelAndHoldAtTime(audioContext.currentTime);
+    sampler.output.gain.cancelScheduledValues(1.0);
     sampler.output.gain.setValueAtTime(sampler.volume * (accent ? globalParams.globalAccent : 1.0), audioContext.currentTime);
     sampler.output.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + (closedState ? sampler.decay_closed : sampler.decay) / 1000.0);
 

@@ -110,9 +110,10 @@ class PresetList {
     presetLi.setAttribute('data-preset-id', id.toString());
     var presetName:HTMLInputElement;
 
+    
     if (typename == 'factory') {
         presetLi.innerHTML = id;
-        this.presetList.insertBefore(presetLi, this.presetList.firstChild);
+        this.presetList.appendChild(presetLi);
     } else {
         if (is_new) {
             presetName = this.createPresetNameEditor(presetLi, preset);

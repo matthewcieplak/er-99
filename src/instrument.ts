@@ -1,26 +1,31 @@
 function playInstrument(instrument:Instrument, accent:Boolean){
-    instrument.osc.frequency.cancelAndHoldAtTime(audioContext.currentTime);
+    // instrument.osc.frequency.cancelAndHoldAtTime(audioContext.currentTime);
+    instrument.osc.frequency.cancelScheduledValues(1.0);
     instrument.osc.frequency.setValueAtTime(instrument.frequency * instrument.env_amount, audioContext.currentTime);
     instrument.osc.frequency.exponentialRampToValueAtTime(instrument.frequency, audioContext.currentTime + instrument.env_duration / 1000.0)
 
     if (instrument.osc2) {
-        instrument.osc2.frequency.cancelAndHoldAtTime(audioContext.currentTime);
+        
+        // instrument.osc2.frequency.cancelAndHoldAtTime(audioContext.currentTime);
+        instrument.osc.frequency.cancelScheduledValues(1.0);
         instrument.osc2.frequency.setValueAtTime((instrument.frequency + instrument.offset) * instrument.env_amount, audioContext.currentTime);
         instrument.osc2.frequency.exponentialRampToValueAtTime(instrument.frequency, audioContext.currentTime + instrument.env_duration / 1000.0)        
     }
     
-    instrument.noiseInput.gain.cancelAndHoldAtTime(audioContext.currentTime);
+    // instrument.noiseInput.gain.cancelAndHoldAtTime(audioContext.currentTime);
+    instrument.noiseInput.gain.cancelScheduledValues(1.0);
     instrument.noiseInput.gain.setValueAtTime(instrument.tone, audioContext.currentTime);
-    instrument.noiseInput.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + instrument.tone_decay / 1000.0);
+    instrument.noiseInput.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + instrument.tone_decay / 1000.0);
     
     instrument.output.gain.setValueAtTime(instrument.volume * (accent ? globalParams.globalAccent : 1.0), audioContext.currentTime);
     if (instrument.saturation) {
         instrument.saturationNode.gain.setValueAtTime(instrument.saturation, audioContext.currentTime);
     }
 
-    instrument.input.gain.cancelAndHoldAtTime(audioContext.currentTime);
+    instrument.input.gain.cancelScheduledValues(1.0);
+    // instrument.input.gain.cancelAndHoldAtTime(audioContext.currentTime);
     instrument.input.gain.linearRampToValueAtTime(instrument.volume, audioContext.currentTime+0.005);
-    instrument.input.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + instrument.decay / 1000.0);
+    instrument.input.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + instrument.decay / 1000.0);
     
     // setTimeout(() => instrument.output.gain.value = 0, instrument.decay);
 }
