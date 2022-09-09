@@ -65,6 +65,8 @@ function keyPressed(event){
 }
 
 function clickKnob(event) {
+    if (clicking == true) return true;
+
     if (event.type == 'mousedown' || event.type == 'touchstart') {
         if (!running) setupAudio();
         clicking = true;
@@ -79,7 +81,7 @@ function clickKnob(event) {
     } 
     clickedTarget = event.currentTarget;
    
-    if (event.touches) {
+    if (event.touches) { 
         touchX = event.touches[0].pageX;
         touchY = event.touches[0].pageY;
     }

@@ -34,13 +34,15 @@ function playNote(instrument_id, accent:Boolean){
         playSampler(instrument, accent, closedState);
     }
 
-    var timeout_length = Math.max(instrument.decay + (instrument.delayConst ? instrument.delayConst*4 + instrument.decay : 0),
+    var timeout_length = Math.max(instrument.decay + (instrument.delayConst ? instrument.delayConst*6 + instrument.decay : 0),
                             (instrument.tone_decay ? instrument.tone_decay : 0));
     
     if (instrument_id == 'ohh') { 
         document.querySelector('#'+(played_id == 'chh' ? 'ohh' : 'chh') + '_led').className = 'led';
         if (played_id == 'chh') {
             timeout_length = instrument.decay_closed;
+        } else if (played_id == 'hc') {
+            timeout_length = instrument.decay * 3 + instrument.delayConst*8;
         } else {
             timeout_length = instrument.decay / 4;
         }

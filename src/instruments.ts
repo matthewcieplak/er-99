@@ -147,12 +147,12 @@ let RimShot: soundGenerator = {
     filterTypes: ['bandpass', 'bandpass', 'bandpass'],
     filterFreqs: [220, 500, 950],
     filterQs:    [10.5, 10.5, 10.5],
-    filterGains: [20, 20, 20],
+    filterGains: [10, 20, 30],
     filterTopology: 'parallel',
     highPassFreq : 100,
     filterNodes: [],
-    volume : 1.0,
-    saturation: 2.0
+    volume : 3.0,
+    saturation: 3.0
 };
 
 
@@ -161,13 +161,14 @@ let HandClap: ClapGenerator = {
     name: 'Hand Clap',
     decay: 80,
     delayConst: 10,
-    filterTypes: ['lowpass', 'highpass', 'peaking'], // 'bandpass'],
-    filterFreqs: [5000, 900, 1200],
-    filterQs:    [0.5, 1.2, 9.5],
+    filterTypes: ['highpass', 'bandpass'], // 'bandpass'],
+    filterFreqs: [900, 1200],
+    filterQs:    [1.2, 0.7], //9.5],
+    filterGains: [0, 0, 5],
     filterTopology: 'serial',
     highPassFreq : 80,
     filterNodes: [],
-    volume : 0.2,
+    volume : 1.5,
     tune: 1000,
     tone: 2200,
     tone_decay: 250

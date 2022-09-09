@@ -6,20 +6,27 @@ function playGenerator(generator:any, accent:Boolean) {
         generator.noiseInput.gain.setValueAtTime(0.5, audioContext.currentTime);
         generator.noiseInput.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + (generator.tone_decay / 1000.0));
 
-        // generator.delayInput.gain.cancelScheduledValues(1.0);
+        generator.delayInput.gain.cancelScheduledValues(1.0);
+
 
         var dc = generator.delayConst/1000.0;
-        generator.delayOutput.gain.setValueAtTime(0.2, audioContext.currentTime); //0.001);
-        generator.delayOutput.gain.setTargetAtTime(0.0001, audioContext.currentTime, dc);
+        let decay_val =  generator.decay / 250 * dc;
+
+
+        generator.delayOutput.gain.setValueAtTime(0.1, audioContext.currentTime); //0.001);
+        generator.delayOutput.gain.setTargetAtTime(0.000001, audioContext.currentTime, dc/3 + decay_val);
 
         generator.delayOutput.gain.setValueAtTime(0.8, audioContext.currentTime+dc); // 0.001);
-        generator.delayOutput.gain.setTargetAtTime(0.00001, audioContext.currentTime+dc, dc);
+        generator.delayOutput.gain.setTargetAtTime(0.000001, audioContext.currentTime+dc, dc/2 + decay_val);
         
-        generator.delayOutput.gain.setValueAtTime(0.6, audioContext.currentTime+dc*2); // 0.001);
-        generator.delayOutput.gain.setTargetAtTime(0.000001, audioContext.currentTime+dc*2, dc);
+        generator.delayOutput.gain.setValueAtTime(0.5, audioContext.currentTime+dc*2); // 0.001);
+        generator.delayOutput.gain.setTargetAtTime(0.000001, audioContext.currentTime+dc*2, dc/2 + decay_val);
 
-        generator.delayOutput.gain.setValueAtTime(0.5, audioContext.currentTime+dc*3); // 0.001);
-        generator.delayOutput.gain.setTargetAtTime(0.000001, audioContext.currentTime+dc*3, dc + (generator.decay / 2500) );
+        generator.delayOutput.gain.setValueAtTime(0.3, audioContext.currentTime+dc*3); // 0.001);
+        generator.delayOutput.gain.setTargetAtTime(0.000001, audioContext.currentTime+dc*3, dc/2 + decay_val);
+
+        generator.delayOutput.gain.setValueAtTime(0.2, audioContext.currentTime+dc*4); // 0.001);
+        generator.delayOutput.gain.setTargetAtTime(0.000001, audioContext.currentTime+dc*4, dc/2 + (generator.decay / 2500) );
     } else {
         if (generator.bufferSource) generator.bufferSource.stop();
         generator.bufferSource = audioContext.createBufferSource();

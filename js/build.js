@@ -4,16 +4,19 @@ function playGenerator(generator, accent) {
         generator.noiseInput.gain.cancelAndHoldAtTime(audioContext.currentTime);
         generator.noiseInput.gain.setValueAtTime(0.5, audioContext.currentTime);
         generator.noiseInput.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + (generator.tone_decay / 1000.0));
-        // generator.delayInput.gain.cancelScheduledValues(1.0);
+        generator.delayInput.gain.cancelScheduledValues(1.0);
         var dc = generator.delayConst / 1000.0;
-        generator.delayOutput.gain.setValueAtTime(0.2, audioContext.currentTime); //0.001);
-        generator.delayOutput.gain.setTargetAtTime(0.0001, audioContext.currentTime, dc);
+        let decay_val = generator.decay / 250 * dc;
+        generator.delayOutput.gain.setValueAtTime(0.1, audioContext.currentTime); //0.001);
+        generator.delayOutput.gain.setTargetAtTime(0.000001, audioContext.currentTime, dc / 3 + decay_val);
         generator.delayOutput.gain.setValueAtTime(0.8, audioContext.currentTime + dc); // 0.001);
-        generator.delayOutput.gain.setTargetAtTime(0.00001, audioContext.currentTime + dc, dc);
-        generator.delayOutput.gain.setValueAtTime(0.6, audioContext.currentTime + dc * 2); // 0.001);
-        generator.delayOutput.gain.setTargetAtTime(0.000001, audioContext.currentTime + dc * 2, dc);
-        generator.delayOutput.gain.setValueAtTime(0.5, audioContext.currentTime + dc * 3); // 0.001);
-        generator.delayOutput.gain.setTargetAtTime(0.000001, audioContext.currentTime + dc * 3, dc + (generator.decay / 2500));
+        generator.delayOutput.gain.setTargetAtTime(0.000001, audioContext.currentTime + dc, dc / 2 + decay_val);
+        generator.delayOutput.gain.setValueAtTime(0.5, audioContext.currentTime + dc * 2); // 0.001);
+        generator.delayOutput.gain.setTargetAtTime(0.000001, audioContext.currentTime + dc * 2, dc / 2 + decay_val);
+        generator.delayOutput.gain.setValueAtTime(0.3, audioContext.currentTime + dc * 3); // 0.001);
+        generator.delayOutput.gain.setTargetAtTime(0.000001, audioContext.currentTime + dc * 3, dc / 2 + decay_val);
+        generator.delayOutput.gain.setValueAtTime(0.2, audioContext.currentTime + dc * 4); // 0.001);
+        generator.delayOutput.gain.setTargetAtTime(0.000001, audioContext.currentTime + dc * 4, dc / 2 + (generator.decay / 2500));
     }
     else {
         if (generator.bufferSource)
@@ -355,11 +358,14 @@ function playNote(instrument_id, accent) {
     else if (samplers.indexOf(instrument) > -1) {
         playSampler(instrument, accent, closedState);
     }
-    var timeout_length = Math.max(instrument.decay + (instrument.delayConst ? instrument.delayConst * 4 + instrument.decay : 0), (instrument.tone_decay ? instrument.tone_decay : 0));
+    var timeout_length = Math.max(instrument.decay + (instrument.delayConst ? instrument.delayConst * 6 + instrument.decay : 0), (instrument.tone_decay ? instrument.tone_decay : 0));
     if (instrument_id == 'ohh') {
         document.querySelector('#' + (played_id == 'chh' ? 'ohh' : 'chh') + '_led').className = 'led';
         if (played_id == 'chh') {
             timeout_length = instrument.decay_closed;
+        }
+        else if (played_id == 'hc') {
+            timeout_length = instrument.decay * 3 + instrument.delayConst * 8;
         }
         else {
             timeout_length = instrument.decay / 4;
@@ -558,25 +564,26 @@ let RimShot = {
     filterTypes: ['bandpass', 'bandpass', 'bandpass'],
     filterFreqs: [220, 500, 950],
     filterQs: [10.5, 10.5, 10.5],
-    filterGains: [20, 20, 20],
+    filterGains: [10, 20, 30],
     filterTopology: 'parallel',
     highPassFreq: 100,
     filterNodes: [],
-    volume: 1.0,
-    saturation: 2.0
+    volume: 2.0,
+    saturation: 3.0
 };
 let HandClap = {
     id: 'hc',
     name: 'Hand Clap',
     decay: 80,
     delayConst: 10,
-    filterTypes: ['lowpass', 'highpass', 'peaking'],
-    filterFreqs: [5000, 900, 1200],
-    filterQs: [0.5, 1.2, 9.5],
+    filterTypes: ['highpass', 'bandpass'],
+    filterFreqs: [900, 1200],
+    filterQs: [1.2, 0.7],
+    filterGains: [0, 0, 5],
     filterTopology: 'serial',
     highPassFreq: 80,
     filterNodes: [],
-    volume: 0.2,
+    volume: 1.5,
     tune: 1000,
     tone: 2200,
     tone_decay: 250
@@ -1200,6 +1207,8 @@ function keyPressed(event) {
     return false;
 }
 function clickKnob(event) {
+    if (clicking == true)
+        return true;
     if (event.type == 'mousedown' || event.type == 'touchstart') {
         if (!running)
             setupAudio();
