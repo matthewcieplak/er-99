@@ -390,6 +390,19 @@ button {
     /* top: 4px; */
 }
 
+/* .sequencer_button .number{
+    border-bottom: 1px solid #5e5c5c;
+}
+
+.sequencer_button:nth-of-type(4n+1) .number{
+    text-decoration-line: underline;
+    border-bottom: 2px solid rgba(100,100,100,0.5);
+} */
+
+.sequencer_button:nth-of-type(4n+1):before{
+    background-color: #fafafa;
+}
+
 .big_button{
     width: 60px;
     height: 60px;
