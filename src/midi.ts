@@ -73,6 +73,8 @@ function onMidiInputChange(event){
       console.log('listening on ', entry.name);
     }
   });
+  input_list.selectedIndex = 0;
+  input_list.dispatchEvent(new Event('change'))
 }
 
 function onMidiChannelChange(event){
